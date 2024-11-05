@@ -1,5 +1,5 @@
 {
-  "name": "edustream-backend",
+  "name": "notification-service",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,9 @@
   "description": "",
   "dependencies": {
     "@types/express": "^5.0.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }

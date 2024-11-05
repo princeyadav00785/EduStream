@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "5000:5000"
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+
+  chat-service:
+    build:
+      context: ./chat-service
+    ports:
+      - "5001:5001"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      
+
+  # notification-service:
+  #   build:
+  #     context: ./notification-service
+  #   ports:
+  #     - "5002:5002"
+  #   environment:
+  #     - DATABASE_URL=${DATABASE_URL}
+
+  # stream-service:
+  #   build:
+  #     context: ./stream-service
+  #   ports:
+  #     - "5003:5003"
+  #   environment:
+  #     - DATABASE_URL=${DATABASE_URL}
+
+networks:
+  default:
+    driver: bridge
