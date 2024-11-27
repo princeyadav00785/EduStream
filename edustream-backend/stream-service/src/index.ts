@@ -1,45 +1,34 @@
 import express from 'express';
-import { WebSocketServer } from 'ws';
 import dotenv from 'dotenv';
+import http from 'http';
 import streamRoutes from './routes/streamRoutes';
-
+import sessionRoutes from './routes/sessionRoutes';
+import { createWebSocketManager } from './utils/WebSocketManager';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5003;
+const server = http.createServer(app);
+const PORT = process.env.STREAM_SERVICE_PORT || 5003;
 
+// Middleware
+app.use(express.json());
+
+// Routes
 app.use('/api/stream', streamRoutes);
+app.use('/api/session', sessionRoutes);
 
-// Create WebSocket server
-const wss = new WebSocketServer({ noServer: true });
+// Initialize WebSocket Manager
+const webSocketManager = createWebSocketManager(server);
 
-// Handle WebSocket connections
-wss.on('connection', (ws) => {
-    console.log('New client connected');
-
-    ws.on('message', (message) => {
-        console.log(`Received message: ${message}`);
-        // Broadcast to all clients
-        wss.clients.forEach((client) => {
-            if (client !== ws && client.readyState === ws.OPEN) {
-                client.send(message);
-            }
-        });
-    });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-    });
+// Start server
+server.listen(PORT, () => {
+    console.log(`Stream service running on http://localhost:${PORT}`);
 });
 
-// Integrate WebSocket with Express
-const server = app.listen(PORT, () => {
-    console.log(`Stream service is running on http://localhost:${PORT}`);
-});
-
-server.on('upgrade', (request, socket, head) => {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-        wss.emit('connection', ws, request);
-    });
+// Example usage of the WebSocketManager's broadcast
+app.post('/api/broadcast', (req, res) => {
+    const { message } = req.body;
+    webSocketManager.broadcast(message);
+    res.status(200).json({ message: 'Message broadcasted to all clients' });
 });

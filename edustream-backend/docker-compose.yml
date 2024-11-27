@@ -26,13 +26,13 @@ services:
   #   environment:
   #     - DATABASE_URL=${DATABASE_URL}
 
-  # stream-service:
-  #   build:
-  #     context: ./stream-service
-  #   ports:
-  #     - "5003:5003"
-  #   environment:
-  #     - DATABASE_URL=${DATABASE_URL}
+  stream-service:
+    build:
+      context: ./stream-service
+    ports:
+      - "5003:5003"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
 
 networks:
   default:
