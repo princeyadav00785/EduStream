@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const streamController_1 = require("../controllers/streamController");
+const router = (0, express_1.Router)();
+router.post('/start', streamController_1.startLiveStream);
+router.post('/stop', streamController_1.stopLiveStream);
+router.post('/record', streamController_1.recordStream);
+router.post('/addClient', streamController_1.addClientToStream);
+router.post('/broadcastStream', streamController_1.broadcastToStream);
+exports.default = router;
