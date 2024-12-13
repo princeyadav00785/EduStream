@@ -22,6 +22,7 @@ export function SignupFormDemo() {
           </div>
           <BackgroundBeamsWithCollision>
           <div className="max-w-sm md:max-w-md w-full mx-auto rounded-3xl md:rounded-3xl p-4 md:p-10 shadow-input bg-white dark:bg-gray-200 bg-gradient-to-r from-gray-300 to-slate-800 text-xl">
+          <div className="text-4xl flex items-center justify-center font-extrabold font-serif">SIGN-UP</div>
             <form className="my-8" onSubmit={handleSubmit}>
               <div className="flex flex-row space-x-2 mb-4">
                 <LabelInputContainer>
