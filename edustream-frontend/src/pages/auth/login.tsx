@@ -6,6 +6,7 @@ import { Boxes } from "../../components/ui/background-boxes";
 import { cn } from "@/lib/utils";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
+import { GlowingStarsBackgroundCard, GlowingStarsTitle } from "@/components/ui/glowing-stars";
 
 export function LoginFormDemo() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -22,8 +23,10 @@ export function LoginFormDemo() {
             EduStream
           </div>
           <BackgroundBeamsWithCollision>
-          <div className="max-w-sm md:max-w-md w-full mx-auto rounded-3xl md:rounded-3xl p-4 md:p-10 shadow-input bg-white dark:bg-gray-200 bg-gradient-to-r from-gray-300 to-slate-800 text-xl">
-            <div className="text-4xl flex items-center justify-center font-extrabold font-serif">LOGIN</div>
+          <GlowingStarsBackgroundCard>
+          <div className="max-w-sm md:max-w-md w-full mx-auto rounded-3xl md:rounded-3xl p-4 md:p-10 shadow-input  dark:bg-gray-200 bg-transparent text-xl">
+              {/* bg-gradient-to-r from-gray-300 to-slate-800 */}
+            <GlowingStarsTitle><div className="text-white text-4xl flex items-center justify-center font-extrabold font-serif ">LOGIN</div></GlowingStarsTitle>
             <form className="my-8" onSubmit={handleSubmit}>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="email">Email Address</Label>
@@ -57,11 +60,12 @@ export function LoginFormDemo() {
                     type="button"
                     className="h-12 text-xs flex items-center justify-center w-full md:w-auto bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition transform hover:scale-105 gap-3 md:gap-0"
                 >
-                    <div className="md:w-16"> <FaGoogle /> </div> Login with Google
+                    <div className="md:w-12"> <FaGoogle /> </div> Login with Google
                 </button>
                 </div>
             </form>
           </div>
+          </GlowingStarsBackgroundCard>
           </BackgroundBeamsWithCollision>
         </div>
         
