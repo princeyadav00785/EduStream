@@ -6,6 +6,8 @@ import * as React from "react";
 import {NavItems} from "../../constants/navItems";
 import { Hero1 } from "@/components/homepage/hero1";
 import { Hero2 } from "@/components/homepage/hero2";
+import { Hero5 } from "@/components/homepage/hero5";
+import { Hero3 } from "@/components/homepage/hero3";
 
 export function Homepage(){
     return (
@@ -15,6 +17,8 @@ export function Homepage(){
           <Hero1/>
           </div>
           <Hero2/>
+          <Hero3/>
+          <Hero5/>
         </div>
     )
 }
