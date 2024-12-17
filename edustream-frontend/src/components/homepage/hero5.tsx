@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import FeaturesSectionDemo from "../features-section-demo-2";
-import { Meteors } from "../ui/meteors";
+
 
 export function Hero5(){
     return (

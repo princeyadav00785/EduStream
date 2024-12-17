@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { AnimatedTestimonials } from "../ui/animated-testimonials";
-import { Meteors } from "../ui/meteors";
 
 export function Hero3(){
     const testimonials = [
