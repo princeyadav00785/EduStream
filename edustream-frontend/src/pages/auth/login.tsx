@@ -8,7 +8,7 @@ import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
 import { GlowingStarsBackgroundCard, GlowingStarsTitle } from "@/components/ui/glowing-stars";
 
-export function LoginFormDemo() {
+export default function LoginFormDemo() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
@@ -95,3 +95,5 @@ const LabelInputContainer = ({
     </div>
   );
 };
+
+

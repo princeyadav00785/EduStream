@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'GeistSans';
+  src: url('/fonts/GeistVF.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+body {
+  font-family: 'GeistSans', sans-serif;
+  background-color: #f9fafb; 
+  color: #111827; 
+  margin: 0;
+  padding: 0;
+}

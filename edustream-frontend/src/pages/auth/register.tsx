@@ -10,7 +10,7 @@ import {
   GlowingStarsTitle,
 } from "@/components/ui/glowing-stars";
 
-export function SignupFormDemo() {
+export default function SignupFormDemo() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
