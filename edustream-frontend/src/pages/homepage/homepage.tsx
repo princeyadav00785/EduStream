@@ -8,6 +8,7 @@ import { Hero1 } from "@/components/homepage/hero1";
 import { Hero2 } from "@/components/homepage/hero2";
 import { Hero5 } from "@/components/homepage/hero5";
 import { Hero3 } from "@/components/homepage/hero3";
+import { Hero4 } from "@/components/homepage/hero4";
 
 export function Homepage(){
     return (
@@ -19,6 +20,7 @@ export function Homepage(){
           <Hero2/>
           <Hero3/>
           <Hero5/>
+          <Hero4/>
         </div>
     )
 }
