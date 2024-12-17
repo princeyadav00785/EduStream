@@ -30,14 +30,15 @@ export function Hero4() {
     "/i8.jpg",
   ];
   return (
-    <div className="py-40  flex items-center justify-center bg-black">
+    <div className="py-40  flex flex-col items-center justify-center bg-black">
       <Modal>
-        <ModalTrigger className="bg-white dark:bg-white dark:text-black text-black flex justify-center group/modal-btn font-extrabold">
+        <div className="font-extrabold text-5xl text-white mb-8"> Sounds Intersting ?</div>
+        <ModalTrigger className="bg-white dark:bg-white dark:text-black text-black flex justify-center group/modal-btn font-extrabold ">
           <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
-            Book your Class today
+          {"    "} Join Class today 
           </span>
           <div className="-translate-x-40 group-hover/modal-btn:translate-x-0 flex items-center justify-center absolute inset-0 transition duration-500 text-black z-20">
-            <IconVideo/>
+           Click here{"  "} <IconVideo/>
           </div>
         </ModalTrigger>
         <ModalBody>

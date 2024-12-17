@@ -4,6 +4,7 @@ import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Boxes } from "../../components/ui/background-boxes";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
 import {
   GlowingStarsBackgroundCard,
@@ -64,6 +65,12 @@ export default function SignupFormDemo() {
                   <BottomGradient />
                 </button>
               </form>
+              <div className="flex flex-col items-center justify-center text-white font-semibold">
+                Already a Member ?
+                <Link href="/auth/login">
+                  <div className="underline "> Login here</div>
+                </Link>
+              </div>
             </div>
           </GlowingStarsBackgroundCard>
         </BackgroundBeamsWithCollision>

@@ -41,7 +41,7 @@ export function Hero1() {
         </button>
       </div>
       <div className="mt-28 w-3/5 h-1/5">
-        <img className="rounded-3xl shadow-2xl shadow-white drop-shadow-xl" src="hero1_i1.jpg" />
+        <img className="rounded-3xl shadow-2xl shadow-white drop-shadow-xl" src="i6.jpg" />
       </div>
     </div>
   );
