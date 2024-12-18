@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation"; 
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
-import { Boxes } from "../../components/ui/background-boxes";
+// import { Boxes } from "../../components/ui/background-boxes";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
-import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
+// import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
 import {
-  GlowingStarsBackgroundCard,
+  // GlowingStarsBackgroundCard,
   GlowingStarsTitle,
 } from "@/components/ui/glowing-stars";
 import { toast } from "react-toastify";
@@ -62,17 +62,17 @@ export default function LoginFormDemo() {
   
 
   return (
-    <div className="h-[100vh] relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center">
+    <div className="h-[100vh] relative w-full overflow-hidden bg-slate-0 flex flex-col items-center justify-center">
       <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
 
-      <Boxes />
+      {/* <Boxes /> */}
       <div className="p-10 z-20">
         <div className="flex items-center justify-center font-bold text-5xl md:text-6xl mb-5 text-gray-300">
           EduStream
         </div>
-        <BackgroundBeamsWithCollision>
-          <GlowingStarsBackgroundCard>
-            <div className="max-w-sm md:max-w-md w-full mx-auto rounded-3xl md:rounded-3xl p-4 md:p-10 shadow-input dark:bg-gray-200 bg-transparent text-xl">
+        {/* <BackgroundBeamsWithCollision> */}
+          {/* <GlowingStarsBackgroundCard> */}
+            <div className=" max-w-sm md:max-w-md w-full mx-auto rounded-3xl md:rounded-3xl p-4 md:p-10 shadow-input dark:bg-gray-200 bg-transparent text-xl">
               <GlowingStarsTitle>
                 <div className="text-white text-4xl flex items-center justify-center font-extrabold font-serif">
                   LOGIN
@@ -145,8 +145,8 @@ export default function LoginFormDemo() {
                 </Link>
               </div>
             </div>
-          </GlowingStarsBackgroundCard>
-        </BackgroundBeamsWithCollision>
+          {/* </GlowingStarsBackgroundCard> */}
+        {/* </BackgroundBeamsWithCollision> */}
       </div>
     </div>
   );

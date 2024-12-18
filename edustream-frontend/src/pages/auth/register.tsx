@@ -2,17 +2,17 @@
 import React, { useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
-import { Boxes } from "../../components/ui/background-boxes";
+// import { Boxes } from "../../components/ui/background-boxes";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import { toast } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css"; 
-import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
-import {
-  GlowingStarsBackgroundCard,
-  GlowingStarsTitle,
-} from "@/components/ui/glowing-stars";
+// import { BackgroundBeamsWithCollision } from "../../components/ui/background-beams-with-collision";
+// import {
+//   GlowingStarsBackgroundCard,
+//   GlowingStarsTitle,
+// } from "@/components/ui/glowing-stars";
 
 export default function SignupFormDemo() {
   const router = useRouter();
@@ -58,21 +58,21 @@ export default function SignupFormDemo() {
   };
 
   return (
-    <div className="h-[100vh] relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center">
+    <div className="h-[100vh] relative w-full overflow-hidden bg-slate-90 flex flex-col items-center justify-center">
       <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-      <Boxes />
+      {/* <Boxes /> */}
       <div className="p-10 z-20">
         <div className="flex items-center justify-center font-bold text-5xl md:text-6xl mb-5 text-gray-300">
           EduStream
         </div>
-        <BackgroundBeamsWithCollision>
-          <GlowingStarsBackgroundCard>
+        {/* <BackgroundBeamsWithCollision> */}
+          {/* <GlowingStarsBackgroundCard> */}
             <div className="max-w-sm md:max-w-md w-full mx-auto rounded-3xl md:rounded-3xl p-4 md:p-10 shadow-input bg-transparent to-slate-800 text-xl">
-              <GlowingStarsTitle>
+              {/* <GlowingStarsTitle> */}
                 <div className="text-4xl flex items-center justify-center font-extrabold font-serif">
                   SIGN-UP
                 </div>
-              </GlowingStarsTitle>
+              {/* </GlowingStarsTitle> */}
               <form className="my-8" onSubmit={handleSubmit}>
                 <div className="flex flex-row space-x-2 mb-4">
                   <LabelInputContainer>
@@ -146,8 +146,8 @@ export default function SignupFormDemo() {
                 </Link>
               </div>
             </div>
-          </GlowingStarsBackgroundCard>
-        </BackgroundBeamsWithCollision>
+          {/* </GlowingStarsBackgroundCard> */}
+        {/* </BackgroundBeamsWithCollision> */}
       </div>
     </div>
   );

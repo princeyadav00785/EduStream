@@ -50,7 +50,7 @@ export function Hero3(){
       
  return (
     <div className="bg-black">
-         <div className="p-10 font-serif font-extrabold text-5xl text-white flex justify-center items-center"> Testimonials</div>
+         <div className="p-32 font-serif font-extrabold text-5xl text-white flex justify-center items-center"> Testimonials</div>
         <AnimatedTestimonials testimonials={testimonials} />
     </div>
  )

@@ -11,7 +11,7 @@ import Footer from "@/components/footer/footer";
 
 export default function Homepage(){
     return (
-        <div>
+        <div className="w-[100vw] ">
          <FloatingNav navItems={NavItems}/>   
           <div className="flex justify-center items-center bg-black h-[100vh] lg:h-[125vh]">
           <Hero1/>

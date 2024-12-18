@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
-import { BackgroundBeams } from "../ui/background-beams";
+// import { BackgroundBeams } from "../ui/background-beams";
 import Link from "next/link";
 export function Hero1() {
   const words = [
@@ -26,8 +26,8 @@ export function Hero1() {
     },
   ];
   return (
-    <div className="flex flex-col items-center justify-center lg:mt-32">
-        <BackgroundBeams/>
+    <div className="flex flex-col items-center justify-center lg:mt-32 md:mt-16">
+        {/* <BackgroundBeams/> */}
       <p className="text-neutral-600 dark:text-neutral-200 text-base sm:text-lg  max-w-4xl mx-10">
       "Revolutionize Learning with Edustream – Where Live Streaming Meets Real-Time Interaction!"
       </p>

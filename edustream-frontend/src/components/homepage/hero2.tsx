@@ -7,7 +7,7 @@ import {
   IconMessageCircle,
   IconBell,
 } from "@tabler/icons-react";
-import { Vortex } from "../ui/vortex";
+// import { Vortex } from "../ui/vortex";
 import {  TypewriterEffectSmooth } from "../ui/typewriter-effect";
 
 export function Hero2() {
@@ -27,7 +27,7 @@ export function Hero2() {
     ]
   return (
     <div className="bg-black h-[150vh] md:h-[100vh] text-white w-full">
-      <Vortex>
+      {/* <Vortex> */}
         <div className="mb-24 font-serif font-extrabold flex justify-center items-center w-full">
           <TypewriterEffectSmooth  words={words}/>
         </div>
@@ -43,7 +43,7 @@ export function Hero2() {
             />
           ))}
         </BentoGrid>
-      </Vortex>
+      {/* </Vortex> */}
     </div>
   );
 }
