@@ -9,16 +9,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = require("@prisma/client");
+const uuid_1 = require("uuid");
+const prisma = new client_1.PrismaClient();
 class SessionService {
     createSession(sessionData) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Logic for creating a session (e.g., saving session data in the database)
-            return Object.assign({ sessionId: '789' }, sessionData);
+            try {
+                const sessionId = (0, uuid_1.v4)();
+                const session = yield prisma.session.create({
+                    data: Object.assign(Object.assign({ id: sessionId }, sessionData), { isActive: true }),
+                });
+                return session;
+            }
+            catch (error) {
+                console.error('Error creating session:', error);
+                throw new Error('Failed to create session');
+            }
+        });
+    }
+    getSessionById(sessionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const session = yield prisma.session.findUnique({
+                    where: { id: sessionId },
+                });
+                if (!session)
+                    throw new Error('Session not found');
+                return session;
+            }
+            catch (error) {
+                console.error('Error fetching session:', error);
+                throw error;
+            }
         });
     }
     endSession(sessionId) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Logic for ending a session (e.g., marking session as inactive)
+            try {
+                const session = yield prisma.session.update({
+                    where: { id: sessionId },
+                    data: { isActive: false, endTime: new Date() },
+                });
+                return session;
+            }
+            catch (error) {
+                console.error('Error ending session:', error);
+                throw new Error('Failed to end session');
+            }
+        });
+    }
+    getAllActiveSessions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sessions = yield prisma.session.findMany({
+                    where: { isActive: true },
+                });
+                return sessions;
+            }
+            catch (error) {
+                console.error('Error fetching active sessions:', error);
+                throw new Error('Failed to fetch active sessions');
+            }
         });
     }
 }

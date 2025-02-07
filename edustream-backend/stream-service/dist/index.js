@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const http_1 = __importDefault(require("http"));
-const streamRoutes_1 = __importDefault(require("./routes/streamRoutes"));
 const sessionRoutes_1 = __importDefault(require("./routes/sessionRoutes"));
 const WebSocketManager_1 = require("./utils/WebSocketManager");
 dotenv_1.default.config();
@@ -16,7 +15,6 @@ const PORT = process.env.STREAM_SERVICE_PORT || 5003;
 // Middleware
 app.use(express_1.default.json());
 // Routes
-app.use('/api/stream', streamRoutes_1.default);
 app.use('/api/session', sessionRoutes_1.default);
 // Initialize WebSocket Manager
 const webSocketManager = (0, WebSocketManager_1.createWebSocketManager)(server);

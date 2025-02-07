@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
-import streamRoutes from './routes/streamRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import { createWebSocketManager } from './utils/WebSocketManager';
 
@@ -15,7 +14,6 @@ const PORT = process.env.STREAM_SERVICE_PORT || 5003;
 app.use(express.json());
 
 // Routes
-app.use('/api/stream', streamRoutes);
 app.use('/api/session', sessionRoutes);
 
 // Initialize WebSocket Manager
