@@ -14,11 +14,29 @@ datasource db {
 }
 
 model Session {
-  id           String   @id @default(uuid())
-  title        String
-  instructorId String
-  startTime    DateTime
-  endTime      DateTime?
-  isActive     Boolean
-  participants String[] @default([])
+  id             String      @id @default(uuid())
+  title          String
+  description    String?
+  instructorId   String      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  startTime     DateTime    @default(now())
+  endTime           DateTime?
+  isActive       Boolean     @default(true)
+  participants        Json        @default(json("{}"))
+  recordingLink  String?
+  maxParticipants Int?
+  sessionType    SessionType @default(LIVE)
+  tags           String[]    @default([])
+  visibility     Visibility  @default(PUBLIC)
+  duration       Int?
+}
+
+enum SessionType {
+  LIVE
+  RECORDED
+  HYBRID
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
 }
