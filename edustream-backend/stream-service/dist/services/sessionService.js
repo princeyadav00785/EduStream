@@ -11,66 +11,199 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const uuid_1 = require("uuid");
+const socket_1 = require("../config/socket");
 const prisma = new client_1.PrismaClient();
 class SessionService {
-    createSession(sessionData) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const sessionId = (0, uuid_1.v4)();
-                const session = yield prisma.session.create({
-                    data: Object.assign(Object.assign({ id: sessionId }, sessionData), { isActive: true }),
-                });
-                return session;
-            }
-            catch (error) {
-                console.error('Error creating session:', error);
-                throw new Error('Failed to create session');
-            }
+    createSession(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ title, description, instructorId }) {
+            return yield prisma.session.create({
+                data: {
+                    id: (0, uuid_1.v4)(),
+                    title,
+                    description,
+                    instructorId,
+                    isActive: true,
+                    clients: {},
+                    waitingList: [],
+                },
+            });
         });
     }
-    getSessionById(sessionId) {
+    joinSession(sessionId, clientId, userId, socketId) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const session = yield prisma.session.findUnique({
-                    where: { id: sessionId },
-                });
-                if (!session)
-                    throw new Error('Session not found');
-                return session;
-            }
-            catch (error) {
-                console.error('Error fetching session:', error);
-                throw error;
-            }
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            // const user = await axios.get(`http://user-service/api/users/${userId}`).then(res => res.data);
+            // if (!user) throw new Error("User not found");
+            // if (user.role === "banned") {
+            //   throw new Error("You are banned from joining sessions");
+            // }
+            let clients = session.clients;
+            clients[userId] = { socketId, muted: false };
+            socket_1.io.to(sessionId).emit("userJoined", { userId });
+            return yield prisma.session.update({
+                where: { id: sessionId },
+                data: { clients },
+            });
         });
     }
-    endSession(sessionId) {
+    requestToJoinSession(sessionId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const session = yield prisma.session.update({
-                    where: { id: sessionId },
-                    data: { isActive: false, endTime: new Date() },
-                });
-                return session;
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            let waitingList = session.waitingList;
+            if (!waitingList.includes(userId)) {
+                waitingList.push(userId);
             }
-            catch (error) {
-                console.error('Error ending session:', error);
-                throw new Error('Failed to end session');
-            }
+            socket_1.io.to(sessionId).emit("userReqToJoin", { userId });
+            return yield prisma.session.update({
+                where: { id: sessionId },
+                data: { waitingList },
+            });
+        });
+    }
+    approveUser(sessionId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            let waitingList = session.waitingList;
+            let clients = session.clients;
+            if (!waitingList.includes(userId))
+                throw new Error("User is not in the waiting list");
+            waitingList = waitingList.filter((id) => id !== userId);
+            clients[userId] = { socketId: "", muted: false };
+            yield prisma.session.update({
+                where: { id: sessionId },
+                data: { waitingList, clients },
+            });
+            socket_1.io.to(sessionId).emit("userApproved", { userId });
+        });
+    }
+    toggleSessionStatus(sessionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            return yield prisma.session.update({
+                where: { id: sessionId },
+                data: { isActive: !session.isActive },
+            });
+        });
+    }
+    getAllSessions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.session.findMany({ orderBy: { createdAt: "desc" } });
         });
     }
     getAllActiveSessions() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const sessions = yield prisma.session.findMany({
-                    where: { isActive: true },
-                });
-                return sessions;
-            }
-            catch (error) {
-                console.error('Error fetching active sessions:', error);
-                throw new Error('Failed to fetch active sessions');
-            }
+            return yield prisma.session.findMany({ where: { isActive: true } });
+        });
+    }
+    getSessionById(sessionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.session.findUnique({ where: { id: sessionId } });
+        });
+    }
+    searchSessions(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.session.findMany({
+                where: {
+                    OR: [
+                        { title: { contains: query.title } },
+                        { description: { contains: query.description } },
+                        { instructorId: { contains: query.instructorId } },
+                    ],
+                },
+            });
+        });
+    }
+    kickOutUser(sessionId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            const clients = session.clients;
+            delete clients[userId];
+            socket_1.io.to(sessionId).emit("userKickedOut", { userId });
+            return yield prisma.session.update({
+                where: { id: sessionId },
+                data: { clients },
+            });
+        });
+    }
+    blockUser(sessionId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            socket_1.io.to(sessionId).emit("userBlocked", { userId });
+            return this.kickOutUser(sessionId, userId);
+        });
+    }
+    endSession(sessionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield prisma.session.delete({ where: { id: sessionId } });
+            socket_1.io.to(sessionId).emit("sessionEnded", { sessionId });
+        });
+    }
+    getSessionAnalytics(sessionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            return {
+                totalParticipants: session.clients ? Object.keys(session.clients).length : 0,
+                sessionDuration: new Date().getTime() - new Date(session.createdAt).getTime(),
+            };
+        });
+    }
+    toggleMuteUser(sessionId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            let clients = session.clients;
+            if (!clients[userId])
+                throw new Error("User not found in session");
+            clients[userId].muted = !clients[userId].muted;
+            yield prisma.session.update({
+                where: { id: sessionId },
+                data: { clients },
+            });
+            socket_1.io
+                .to(sessionId)
+                .emit("userMuted", { userId, muted: clients[userId].muted });
+        });
+    }
+    leaveSession(sessionId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const session = yield prisma.session.findUnique({
+                where: { id: sessionId },
+            });
+            if (!session)
+                throw new Error("Session not found");
+            let clients = session.clients;
+            delete clients[userId];
+            yield prisma.session.update({
+                where: { id: sessionId },
+                data: { clients },
+            });
+            socket_1.io.to(sessionId).emit("userLeft", { userId });
         });
     }
 }

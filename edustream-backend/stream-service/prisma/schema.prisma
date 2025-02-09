@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -14,29 +9,34 @@ datasource db {
 }
 
 model Session {
+
   id             String      @id @default(uuid())
   title          String
   description    String?
-  instructorId   String      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
-  startTime     DateTime    @default(now())
-  endTime           DateTime?
+  instructorId   String      
+  createdAt     DateTime    @default(now())
+  endTime        DateTime?
   isActive       Boolean     @default(true)
-  participants        Json        @default(json("{}"))
+  clients   Json        
   recordingLink  String?
   maxParticipants Int?
   sessionType    SessionType @default(LIVE)
   tags           String[]    @default([])
   visibility     Visibility  @default(PUBLIC)
   duration       Int?
+  waitingList    Json
 }
 
+
 enum SessionType {
+
   LIVE
   RECORDED
   HYBRID
 }
 
 enum Visibility {
+
   PUBLIC
   PRIVATE
 }
