@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { io } from "../config/socket";
+import { userSocketMap } from '../config/socket';
+
 
 const prisma = new PrismaClient();
 
@@ -21,9 +23,7 @@ class SessionService {
 
   async joinSession(
     sessionId: string,
-    clientId: string,
     userId: string,
-    socketId: string
   ) {
     const session = await prisma.session.findUnique({
       where: { id: sessionId },
@@ -37,6 +37,8 @@ class SessionService {
     // if (user.role === "banned") {
     //   throw new Error("You are banned from joining sessions");
     // }
+    const socketId = userSocketMap.get(userId);
+    if(!socketId) throw new Error("WebSocket connection required");
 
     let clients = session.clients as Record<
       string,

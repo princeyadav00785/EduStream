@@ -13,12 +13,10 @@ export const createSession = async (req: Request, res: Response) => {
 
 export const joinSession = async (req: Request, res: Response) => {
   try {
-    const { sessionId, clientId, userId, socketId } = req.body;
+    const { sessionId, userId } = req.body;
     const session = await sessionService.joinSession(
       sessionId,
-      clientId,
       userId,
-      socketId
     );
     res.status(200).json({ message: "Joined session successfully", session });
   } catch (error) {
