@@ -4,6 +4,8 @@ import http from 'http';
 import sessionRoutes from './routes/sessionRoutes';
 import { initializeSocket } from './config/socket';
 import cors from 'cors';
+const authMiddleware = require("./middleware/authMiddleware");
+
 
 dotenv.config();
 
@@ -16,6 +18,7 @@ app.use(cors());
 
 // Middleware
 app.use(express.json());
+app.use(authMiddleware);  
 
 // Routes
 app.use('/api/session', sessionRoutes);

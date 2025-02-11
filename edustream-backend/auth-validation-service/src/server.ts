@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/validate-auth", authRoutes);
+app.use("/api/", authRoutes);
 
 // Start Server
 app.listen(PORT, () => {
