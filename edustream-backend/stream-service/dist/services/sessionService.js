@@ -15,7 +15,7 @@ const socket_1 = require("../config/socket");
 const prisma = new client_1.PrismaClient();
 class SessionService {
     createSession(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ title, description, instructorId }) {
+        return __awaiter(this, arguments, void 0, function* ({ title, description, instructorId, socketId }) {
             return yield prisma.session.create({
                 data: {
                     id: (0, uuid_1.v4)(),
@@ -23,13 +23,13 @@ class SessionService {
                     description,
                     instructorId,
                     isActive: true,
-                    clients: {},
+                    clients: { [instructorId]: { socketId, muted: false } },
                     waitingList: [],
                 },
             });
         });
     }
-    joinSession(sessionId, clientId, userId, socketId) {
+    joinSession(sessionId, userId, socketId) {
         return __awaiter(this, void 0, void 0, function* () {
             const session = yield prisma.session.findUnique({
                 where: { id: sessionId },
@@ -41,6 +41,8 @@ class SessionService {
             // if (user.role === "banned") {
             //   throw new Error("You are banned from joining sessions");
             // }
+            if (!socketId)
+                throw new Error("WebSocket connection required");
             let clients = session.clients;
             clients[userId] = { socketId, muted: false };
             socket_1.io.to(sessionId).emit("userJoined", { userId });
@@ -68,7 +70,7 @@ class SessionService {
             });
         });
     }
-    approveUser(sessionId, userId) {
+    approveUser(sessionId, userId, socketId) {
         return __awaiter(this, void 0, void 0, function* () {
             const session = yield prisma.session.findUnique({
                 where: { id: sessionId },
@@ -80,7 +82,7 @@ class SessionService {
             if (!waitingList.includes(userId))
                 throw new Error("User is not in the waiting list");
             waitingList = waitingList.filter((id) => id !== userId);
-            clients[userId] = { socketId: "", muted: false };
+            clients[userId] = { socketId, muted: false };
             yield prisma.session.update({
                 where: { id: sessionId },
                 data: { waitingList, clients },

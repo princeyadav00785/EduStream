@@ -27,8 +27,8 @@ const createSession = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createSession = createSession;
 const joinSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { sessionId, clientId, userId, socketId } = req.body;
-        const session = yield sessionService_1.default.joinSession(sessionId, clientId, userId, socketId);
+        const { sessionId, userId, socketId } = req.body;
+        const session = yield sessionService_1.default.joinSession(sessionId, userId, socketId);
         res.status(200).json({ message: "Joined session successfully", session });
     }
     catch (error) {
@@ -43,8 +43,8 @@ const arequestToJoin = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.arequestToJoin = arequestToJoin;
 const approveUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { sessionId, userId } = req.body;
-    yield sessionService_1.default.approveUser(sessionId, userId);
+    const { sessionId, userId, socketId } = req.body;
+    yield sessionService_1.default.approveUser(sessionId, userId, socketId);
     res.json({ message: "User approved" });
 });
 exports.approveUser = approveUser;

@@ -13,10 +13,11 @@ export const createSession = async (req: Request, res: Response) => {
 
 export const joinSession = async (req: Request, res: Response) => {
   try {
-    const { sessionId, userId } = req.body;
+    const { sessionId, userId,socketId } = req.body;
     const session = await sessionService.joinSession(
       sessionId,
       userId,
+      socketId,
     );
     res.status(200).json({ message: "Joined session successfully", session });
   } catch (error) {
@@ -31,8 +32,8 @@ export const arequestToJoin = async (req: Request, res: Response) => {
 };
 
 export const approveUser = async (req: Request, res: Response) => {
-  const { sessionId, userId } = req.body;
-  await sessionService.approveUser(sessionId, userId);
+  const { sessionId, userId,socketId } = req.body;
+  await sessionService.approveUser(sessionId, userId,socketId);
   res.json({ message: "User approved" });
 };
 
