@@ -4,38 +4,41 @@ import socket from "../../config/socket";
 
 const CreateSession = () => {
     const [title, setTitle] = useState("");
-    const [description,setDescription]=useState("");
-    const [userId, setUserId] = useState("");
+    const [description, setDescription] = useState("");
+    const [instructorName, setInstructorName] = useState("");
+    const [maxParticipants, setMaxParticipants] = useState("");
 
     useEffect(() => {
         socket.connect();
 
         socket.on("connect", () => {
             console.log("Instructor connected with socket ID:", socket.id);
-            socket.emit("registerSocket", { userId, socketId: socket.id });
+            socket.emit("registerSocket", { socketId: socket.id });
         });
 
         return () => {
             socket.disconnect();
         };
-    }, [userId]);
+    }, []);
 
     const handleCreateSession = async () => {
         try {
-            // if (title=="" || userId=="") {
-            //     alert(`Enter a session title and ensure you're logged in. ${title} , ${description}`);
-            //     return;
-            // }
+            // Validation
+            if (title === "" || instructorName === "") {
+                alert("Please fill in all required fields.");
+                return;
+            }
 
-            const response = await axios.post("http://localhost:5003/api/session", {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_STREAM_API_URL}/create-session`, {
                 title,
                 description,
-                instructorId: userId,
-                socketId: socket.id, 
+                instructorName,
+                maxParticipants: maxParticipants ? parseInt(maxParticipants) : null, 
+                socketId: socket.id,
             });
 
             console.log("Session Created:", response.data);
-        } catch (error:any) {
+        } catch (error: any) {
             console.error("Error creating session:", error.response?.data || error.message);
         }
     };
@@ -54,6 +57,18 @@ const CreateSession = () => {
                 placeholder="Enter Session Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="Enter Instructor Name"
+                value={instructorName}
+                onChange={(e) => setInstructorName(e.target.value)}
+            />
+            <input
+                type="number"
+                placeholder="Enter Max Participants"
+                value={maxParticipants}
+                onChange={(e) => setMaxParticipants(e.target.value)}
             />
             <button onClick={handleCreateSession}>Create Session</button>
         </div>

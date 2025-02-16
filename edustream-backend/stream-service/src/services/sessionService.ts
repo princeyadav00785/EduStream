@@ -3,18 +3,19 @@ import { v4 as uuidv4 } from "uuid";
 import { io } from "../config/socket";
 import { userSocketMap } from '../config/socket';
 
-
 const prisma = new PrismaClient();
-
 class SessionService {
-  async createSession({ title, description, instructorId ,socketId}: any) {
+  async createSession( title :string, description:string, instructorId:string ,socketId:string,instructorName:string,maxParticipants:number) {
+    // console.log(`${title}, ${description}, ${instructorId} ,${socketId},${instructorName},${maxParticipants}`);
     return await prisma.session.create({
       data: {
         id: uuidv4(),
         title,
         description,
-        instructorId,
+        instructorName,
+        maxParticipants,
         isActive: true,
+        instructorId,
         clients: { [instructorId]: { socketId, muted: false } },
         waitingList: [],
       },

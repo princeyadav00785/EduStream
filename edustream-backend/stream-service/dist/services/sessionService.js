@@ -14,15 +14,18 @@ const uuid_1 = require("uuid");
 const socket_1 = require("../config/socket");
 const prisma = new client_1.PrismaClient();
 class SessionService {
-    createSession(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ title, description, instructorId, socketId }) {
+    createSession(title, description, instructorId, socketId, instructorName, maxParticipants) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // console.log(`${title}, ${description}, ${instructorId} ,${socketId},${instructorName},${maxParticipants}`);
             return yield prisma.session.create({
                 data: {
                     id: (0, uuid_1.v4)(),
                     title,
                     description,
-                    instructorId,
+                    instructorName,
+                    maxParticipants,
                     isActive: true,
+                    instructorId,
                     clients: { [instructorId]: { socketId, muted: false } },
                     waitingList: [],
                 },

@@ -16,8 +16,10 @@ const PORT = process.env.STREAM_SERVICE_PORT || 5003;
 app.use((0, cors_1.default)());
 // Middleware
 app.use(express_1.default.json());
+// app.use(authMiddleware as unknown as express.RequestHandler);
+// console.log(authMiddleware);
 // Routes
-app.use('/api/session', sessionRoutes_1.default);
+app.use("/api/session", sessionRoutes_1.default);
 (0, socket_1.initializeSocket)(server);
 // Start server
 server.listen(PORT, () => {

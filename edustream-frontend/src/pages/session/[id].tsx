@@ -21,7 +21,7 @@ const SessionDetails = () => {
 
     const fetchSession = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/session/${id}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_STREAM_API_URL}/session-info/${id}`);
         setSession(response.data);
       } catch (error) {
         console.error("Error fetching session details:", error);

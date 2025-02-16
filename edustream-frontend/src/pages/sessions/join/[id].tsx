@@ -24,7 +24,7 @@ const JoinSession = () => {
       socket.emit("registerSocket", { userId, socketId: socket.id });
 
       axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/session/join`, {
+        .post(`${process.env.NEXT_PUBLIC_STREAM_API_URL}/session/join`, {
           sessionId,
           userId,
           socketId: socket.id,

@@ -15,7 +15,7 @@ const AllSessions = () => {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sessions/all`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_STREAM_API_URL}/all`);
         setSessions(response.data);
       } catch (error) {
         console.error("Error fetching sessions:", error);
@@ -36,7 +36,7 @@ const AllSessions = () => {
             <p className={`font-bold ${session.isLive ? "text-green-500" : "text-gray-400"}`}>
               {session.isLive ? "Live 🔴" : "Upcoming 🕒"}
             </p>
-            <Link href={`/sessions/${session.id}`} passHref>
+            <Link href={`/session/${session.id}`} passHref>
               <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded">
                 View Details
               </button>

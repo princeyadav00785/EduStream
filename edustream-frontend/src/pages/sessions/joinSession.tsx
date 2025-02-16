@@ -26,7 +26,7 @@ const JoinSession = () => {
                 return;
             }
 
-            const response = await axios.post("http://localhost:5000/session/join", {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_STREAM_API_URL}/join`, {
                 sessionId,
                 userId,
                 socketId: socket.id, 

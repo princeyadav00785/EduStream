@@ -5,8 +5,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const validateToken = (req: Request, res: Response): void => {
-  const token = req.headers.authorization?.split(" ")[1];
-
+  console.log("inside validation service...");
+  const token = req.headers.authorization;
+  console.log(token);
   if (!token) {
     res.status(401).json({ error: "Unauthorized: No token provided" });
     return;
