@@ -1,78 +1,113 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import socket from "../../config/socket";
+import usePost from "../../hooks/usePost"; 
 
 const CreateSession = () => {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [instructorName, setInstructorName] = useState("");
-    const [maxParticipants, setMaxParticipants] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    instructorName: "",
+    maxParticipants: "",
+  });
 
-    useEffect(() => {
-        socket.connect();
+  const { data, isLoading, error, postData } = usePost(
+    `${process.env.NEXT_PUBLIC_STREAM_API_URL}/create-session`
+  );
 
-        socket.on("connect", () => {
-            console.log("Instructor connected with socket ID:", socket.id);
-            socket.emit("registerSocket", { socketId: socket.id });
-        });
+  useEffect(() => {
+    socket.connect();
 
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+    socket.on("connect", () => {
+      console.log("Instructor connected with socket ID:", socket.id);
+      socket.emit("registerSocket", { socketId: socket.id });
+    });
 
-    const handleCreateSession = async () => {
-        try {
-            // Validation
-            if (title === "" || instructorName === "") {
-                alert("Please fill in all required fields.");
-                return;
-            }
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_STREAM_API_URL}/create-session`, {
-                title,
-                description,
-                instructorName,
-                maxParticipants: maxParticipants ? parseInt(maxParticipants) : null, 
-                socketId: socket.id,
-            });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
 
-            console.log("Session Created:", response.data);
-        } catch (error: any) {
-            console.error("Error creating session:", error.response?.data || error.message);
-        }
+  const handleCreateSession = async () => {
+    if (!formData.title || !formData.instructorName) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const sessionData = {
+      ...formData,
+      maxParticipants: formData.maxParticipants ? parseInt(formData.maxParticipants) : null,
+      socketId: socket.id,
     };
 
-    return (
-        <div>
-            <h2>Create a Session</h2>
-            <input
-                type="text"
-                placeholder="Enter Session Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <input
-                type="text"
-                placeholder="Enter Session Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-            />
-            <input
-                type="text"
-                placeholder="Enter Instructor Name"
-                value={instructorName}
-                onChange={(e) => setInstructorName(e.target.value)}
-            />
-            <input
-                type="number"
-                placeholder="Enter Max Participants"
-                value={maxParticipants}
-                onChange={(e) => setMaxParticipants(e.target.value)}
-            />
-            <button onClick={handleCreateSession}>Create Session</button>
+    await postData(sessionData);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
+      <h2 className="text-4xl font-bold text-cyan-400 mb-6"> Create a New Session</h2>
+
+      <div className="w-full max-w-lg bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="space-y-4">
+          <input 
+            type="text" 
+            id="title" 
+            placeholder="Session Title" 
+            value={formData.title} 
+            onChange={handleChange} 
+            className="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white focus:border-cyan-400"
+          />
+
+          <input 
+            type="text" 
+            id="description" 
+            placeholder="Session Description (Optional)" 
+            value={formData.description} 
+            onChange={handleChange} 
+            className="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white focus:border-cyan-400"
+          />
+
+          <input 
+            type="text" 
+            id="instructorName" 
+            placeholder="Instructor Name" 
+            value={formData.instructorName} 
+            onChange={handleChange} 
+            className="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white focus:border-cyan-400"
+          />
+
+          <input 
+            type="number" 
+            id="maxParticipants" 
+            placeholder="Max Participants (Optional)" 
+            value={formData.maxParticipants} 
+            onChange={handleChange} 
+            className="w-full p-3 border border-gray-600 rounded-md bg-gray-900 text-white focus:border-cyan-400"
+          />
+
+          <button 
+            onClick={handleCreateSession} 
+            disabled={isLoading} 
+            className={`w-full py-3 rounded-md font-semibold text-white transition-all ${
+              isLoading ? "bg-gray-600 cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-600"
+            }`}
+          >
+            {isLoading ? "Creating..." : "Create Session"}
+          </button>
         </div>
-    );
+
+        {/* Error Message */}
+        {error && <p className="text-red-500 mt-4 text-center">Error: {error}</p>}
+
+        {/* Success Message */}
+        {data && <p className="text-green-500 mt-4 text-center">✅ Session Created Successfully!</p>}
+      </div>
+    </div>
+  );
 };
 
 export default CreateSession;
