@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const uuid_1 = require("uuid");
 const socket_1 = require("../config/socket");
+const livekit_1 = require("../config/livekit");
 const prisma = new client_1.PrismaClient();
 class SessionService {
     createSession(title, description, instructorId, socketId, instructorName, maxParticipants) {
@@ -49,10 +50,16 @@ class SessionService {
             let clients = session.clients;
             clients[userId] = { socketId, muted: false };
             socket_1.io.to(sessionId).emit("userJoined", { userId });
-            return yield prisma.session.update({
+            const token = yield (0, livekit_1.generateLiveKitToken)(userId, sessionId);
+            const updatedSession = yield prisma.session.update({
                 where: { id: sessionId },
                 data: { clients },
             });
+            return {
+                token,
+                livekitUrl: livekit_1.LIVEKIT_URL,
+                session: updatedSession,
+            };
         });
     }
     requestToJoinSession(sessionId, userId) {
@@ -170,7 +177,9 @@ class SessionService {
             if (!session)
                 throw new Error("Session not found");
             return {
-                totalParticipants: session.clients ? Object.keys(session.clients).length : 0,
+                totalParticipants: session.clients
+                    ? Object.keys(session.clients).length
+                    : 0,
                 sessionDuration: new Date().getTime() - new Date(session.createdAt).getTime(),
             };
         });
@@ -190,9 +199,10 @@ class SessionService {
                 where: { id: sessionId },
                 data: { clients },
             });
-            socket_1.io
-                .to(sessionId)
-                .emit("userMuted", { userId, muted: clients[userId].muted });
+            socket_1.io.to(sessionId).emit("userMuted", {
+                userId,
+                muted: clients[userId].muted,
+            });
         });
     }
     leaveSession(sessionId, userId) {

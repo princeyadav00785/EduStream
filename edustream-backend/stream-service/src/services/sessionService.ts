@@ -1,11 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { io } from "../config/socket";
-import { userSocketMap } from '../config/socket';
+import { userSocketMap } from "../config/socket";
+import { generateLiveKitToken, LIVEKIT_URL } from "../config/livekit";
 
 const prisma = new PrismaClient();
 class SessionService {
-  async createSession( title :string, description:string, instructorId:string ,socketId:string,instructorName:string,maxParticipants:number) {
+  async createSession(
+    title: string,
+    description: string,
+    instructorId: string,
+    socketId: string,
+    instructorName: string,
+    maxParticipants: number
+  ) {
     // console.log(`${title}, ${description}, ${instructorId} ,${socketId},${instructorName},${maxParticipants}`);
     return await prisma.session.create({
       data: {
@@ -22,11 +30,7 @@ class SessionService {
     });
   }
 
-  async joinSession(
-    sessionId: string,
-    userId: string,
-    socketId: string,
-  ) {
+  async joinSession(sessionId: string, userId: string, socketId: string) {
     const session = await prisma.session.findUnique({
       where: { id: sessionId },
     });
@@ -40,7 +44,7 @@ class SessionService {
     //   throw new Error("You are banned from joining sessions");
     // }
 
-    if(!socketId) throw new Error("WebSocket connection required");
+    if (!socketId) throw new Error("WebSocket connection required");
 
     let clients = session.clients as Record<
       string,
@@ -49,11 +53,17 @@ class SessionService {
     clients[userId] = { socketId, muted: false };
 
     io.to(sessionId).emit("userJoined", { userId });
-
-    return await prisma.session.update({
+    const token = await generateLiveKitToken(userId, sessionId);
+    const updatedSession = await prisma.session.update({
       where: { id: sessionId },
       data: { clients },
     });
+
+    return {
+      token,
+      livekitUrl: LIVEKIT_URL,
+      session: updatedSession,
+    };
   }
 
   async requestToJoinSession(sessionId: string, userId: string) {
@@ -75,7 +85,7 @@ class SessionService {
     });
   }
 
-  async approveUser(sessionId: string, userId: string,socketId: string) {
+  async approveUser(sessionId: string, userId: string, socketId: string) {
     const session = await prisma.session.findUnique({
       where: { id: sessionId },
     });
@@ -91,7 +101,8 @@ class SessionService {
       throw new Error("User is not in the waiting list");
 
     waitingList = waitingList.filter((id) => id !== userId);
-    clients[userId] = {socketId, muted: false };
+    clients[userId] = { socketId, muted: false };
+    const token = await generateLiveKitToken(userId, sessionId);
 
     await prisma.session.update({
       where: { id: sessionId },
@@ -99,6 +110,7 @@ class SessionService {
     });
 
     io.to(sessionId).emit("userApproved", { userId });
+    return { token, livekitUrl: LIVEKIT_URL };
   }
 
   async toggleSessionStatus(sessionId: string) {
@@ -171,7 +183,9 @@ class SessionService {
     if (!session) throw new Error("Session not found");
 
     return {
-      totalParticipants: session.clients ? Object.keys(session.clients).length : 0,
+      totalParticipants: session.clients
+        ? Object.keys(session.clients).length
+        : 0,
       sessionDuration:
         new Date().getTime() - new Date(session.createdAt).getTime(),
     };
@@ -196,9 +210,10 @@ class SessionService {
       data: { clients },
     });
 
-    io
-      .to(sessionId)
-      .emit("userMuted", { userId, muted: clients[userId].muted });
+    io.to(sessionId).emit("userMuted", {
+      userId,
+      muted: clients[userId].muted,
+    });
   }
 
   async leaveSession(sessionId: string, userId: string) {

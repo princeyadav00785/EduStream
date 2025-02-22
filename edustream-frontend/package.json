@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@livekit/components-react": "^2.8.1",
     "@radix-ui/react-label": "^2.1.1",
     "@tabler/icons-react": "^3.26.0",
     "axios": "^1.7.9",
@@ -16,6 +17,7 @@
     "clsx": "^2.1.1",
     "cobe": "^0.6.3",
     "framer-motion": "^11.15.0",
+    "livekit-client": "^2.9.3",
     "lucide-react": "^0.468.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "15.0.2",
