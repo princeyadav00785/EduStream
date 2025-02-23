@@ -93,11 +93,13 @@ class SessionService {
                 throw new Error("User is not in the waiting list");
             waitingList = waitingList.filter((id) => id !== userId);
             clients[userId] = { socketId, muted: false };
+            const token = yield (0, livekit_1.generateLiveKitToken)(userId, sessionId);
             yield prisma.session.update({
                 where: { id: sessionId },
                 data: { waitingList, clients },
             });
             socket_1.io.to(sessionId).emit("userApproved", { userId });
+            return { token, livekitUrl: livekit_1.LIVEKIT_URL };
         });
     }
     toggleSessionStatus(sessionId) {

@@ -43,15 +43,18 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     console.log("inside middleware..");
     try {
         //  will Call the Auth Validation Microservice, would going to add this in all microservice...
-        const response = yield axios.post("http://localhost:5004/api/validate-token", {}, { headers: { Authorization: token } });
-        if (response.data.valid) {
-            req.user = { id: response.data.userId, role: response.data.role };
-            // console.log(`role of user : ${req.user.id}, ${req.user.role}`);
-            next();
-        }
-        else {
-            return res.status(403).json({ error: "Invalid token" });
-        }
+        // const response =  await axios.post(
+        //   "http://localhost:5004/api/validate-token", 
+        //   {}, 
+        //   { headers: { Authorization: token } }
+        // );
+        // if (response.data.valid) {
+        //   req.user = { id: response.data.userId, role: response.data.role }; 
+        //   // console.log(`role of user : ${req.user.id}, ${req.user.role}`);
+        //   next();
+        // } else {
+        //  return res.status(403).json({ error: "Invalid token" });
+        // }
     }
     catch (err) {
         return res.status(403).json({ error: `Token validation failed: ${err}` });

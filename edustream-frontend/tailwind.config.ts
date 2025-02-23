@@ -7,7 +7,7 @@ const {
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{ts,tsx}",  "./node_modules/@livekit/components-react/**/*.{js,ts,jsx,tsx}"],
   darkMode: ["class", "class"],
   theme: {
     extend: {

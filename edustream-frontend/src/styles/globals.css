@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @font-face {
   font-family: 'GeistSans';
   src: url('/fonts/GeistVF.woff') format('woff');
@@ -15,4 +16,8 @@ body {
   color: #111827; 
   margin: 0;
   padding: 0;
+}
+
+.lk-video-conference {
+  all: unset;
 }

@@ -29,26 +29,26 @@ const initializeSocket = (server) => {
             console.log(`User left session: ${sessionId}`);
         });
         // Handle WebRTC signaling
-        socket.on('offer', ({ sessionId, offer }) => {
-            console.log(`Received offer from user in session ${sessionId}`);
-            socket.to(sessionId).emit('offer', { offer });
-        });
-        socket.on('answer', ({ sessionId, answer }) => {
-            console.log(`Received answer in session ${sessionId}`);
-            socket.to(sessionId).emit('answer', { answer });
-        });
-        socket.on('ice-candidate', ({ sessionId, candidate }) => {
-            console.log(`Received ICE candidate in session ${sessionId}`);
-            socket.to(sessionId).emit('ice-candidate', { candidate });
-        });
-        socket.on('start-stream', ({ sessionId }) => {
-            console.log(`Starting stream in session ${sessionId}`);
-            socket.to(sessionId).emit('start-stream');
-        });
-        socket.on('end-stream', ({ sessionId }) => {
-            console.log(`Ending stream in session ${sessionId}`);
-            socket.to(sessionId).emit('end-stream');
-        });
+        // socket.on('offer', ({ sessionId, offer }) => {
+        //     console.log(`Received offer from user in session ${sessionId}`);
+        //     socket.to(sessionId).emit('offer', { offer });
+        // });
+        // socket.on('answer', ({ sessionId, answer }) => {
+        //     console.log(`Received answer in session ${sessionId}`);
+        //     socket.to(sessionId).emit('answer', { answer });
+        // });
+        // socket.on('ice-candidate', ({ sessionId, candidate }) => {
+        //     console.log(`Received ICE candidate in session ${sessionId}`);
+        //     socket.to(sessionId).emit('ice-candidate', { candidate });
+        // });
+        // socket.on('start-stream', ({ sessionId }) => {
+        //     console.log(`Starting stream in session ${sessionId}`);
+        //     socket.to(sessionId).emit('start-stream');
+        // });
+        // socket.on('end-stream', ({ sessionId }) => {
+        //     console.log(`Ending stream in session ${sessionId}`);
+        //     socket.to(sessionId).emit('end-stream');
+        // });
         // Handle disconnection
         socket.on('disconnect', () => {
             console.log(`User disconnected: ${socket.id}`);
