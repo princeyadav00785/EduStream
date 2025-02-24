@@ -4,6 +4,8 @@ import {
     getSessionInfo, searchSessions, kickOutUser, blockUser, endSession 
 } from '../controllers/sessionControllers';
 import { isInstructor } from '../middlewares/isInstructor';
+import { startRecording, stopRecording, getRecordingStatus, listRecordings, getRecording,livekitWebhook } from "../controllers/recordingController";
+
 // import * as controllers from '../controllers/sessionControllers';
 // console.log(controllers); 
 
@@ -19,5 +21,19 @@ router.get('/search', searchSessions);
 router.post('/kick-out', isInstructor, kickOutUser);
 router.post('/block', isInstructor, blockUser);
 router.patch('/end/:sessionId', isInstructor, endSession);
+
+// Session Recording Routes ...
+// Start Recording
+router.post("/recording/start", startRecording);
+// Stop Recording
+router.post("/recording/stop", stopRecording);
+// Get Recording Status
+router.get("/recording/status/:recordingId", getRecordingStatus);
+// List All Recordings
+router.get("/recording/list", listRecordings);
+// Get Specific Recording
+router.get("/recording/:recordingId", getRecording);
+// Webhook to receive LiveKit recording updates
+router.post("/recording/webhook", livekitWebhook);
 
 export default router;

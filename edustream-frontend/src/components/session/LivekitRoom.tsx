@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { LiveKitRoom, VideoConference,  } from "@livekit/components-react";
+import { LiveKitRoom,
+     VideoConference, 
+     } from "@livekit/components-react";
 import "@livekit/components-styles"; 
 import ChatListner from "./ChatListener";
 
@@ -37,7 +39,7 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
   return (
     <LiveKitRoom serverUrl={LIVEKIT_URL} token={token} connect={true}>
      <VideoConference className="lk-video-conference" />
-     <ChatListner/>
+     {/* <ChatListner/> */}
     </LiveKitRoom>
   );
 };
