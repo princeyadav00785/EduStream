@@ -1,0 +1,17 @@
+log_level: debug
+api_key: APIAQjAhM5zdVaW
+api_secret: hPS7Vq5SucSIh99tzmjTn9oFL3tcuDp3rTdRnETn2wM
+ws_url: ws://192.168.65.254:7880  # Use the correct Docker host IP
+insecure: true
+redis:
+  address: 192.168.65.254:6379  # Use the same IP for Redis
+
+# Optional fields
+# health_port: if used, will open an http port for health checks
+# template_port: port used to host default templates (default 798
+s3:
+aws_access_key_id: process.env.AWS_ACCESS_KEY_ID
+aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY
+region: process.env.AWS_REGION
+endpoint: /livekit-recordings/
+bucket: process.env.AWS_BUCKET_NAME
