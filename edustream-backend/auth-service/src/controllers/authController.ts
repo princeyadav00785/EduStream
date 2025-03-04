@@ -81,3 +81,8 @@ export const loginUser: RequestHandler = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// status api
+export const apiStatus:RequestHandler =(req,res)=>{
+    res.status(200).json({message:'Auth api is running'});
+}

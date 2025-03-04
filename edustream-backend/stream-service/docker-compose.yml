@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --protected-mode no
+
+  livekit:
+    image: livekit/livekit-server
+    container_name: livekit
+    restart: always
+    ports:
+      - "7880:7880"
+      - "7881:7881"
+      - "7882:7882/udp"
+    volumes:
+      - ./livekit.yaml:/config.yaml
+    command: --config /config.yaml
+
+  livekit-egress:
+    image: livekit/egress
+    container_name: livekit-egress
+    restart: always
+    depends_on:
+      - livekit
+      - redis
+environment:
+    EGRESS_CONFIG_FILE: /out/config.yaml
+    volumes:
+      - ./livekit_egress.yaml:/out/config.yaml
+    cap_add:
+      - SYS_ADMIN

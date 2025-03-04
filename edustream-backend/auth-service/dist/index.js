@@ -17,6 +17,7 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 // Routes
 app.post('/api/auth/register', authController_1.registerUser);
 app.post('/api/auth/login', authController_1.loginUser);
+app.get('/api/status', authController_1.apiStatus);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

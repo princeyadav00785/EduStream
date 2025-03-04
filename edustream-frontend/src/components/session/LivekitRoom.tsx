@@ -5,6 +5,7 @@ import { LiveKitRoom,
      } from "@livekit/components-react";
 import "@livekit/components-styles"; 
 import ChatListner from "./ChatListener";
+import RecordingControl from "../recording/RecordingControl";
 
 interface LiveKitRoomProps {
   userId: string;
@@ -13,6 +14,7 @@ interface LiveKitRoomProps {
 
 const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [sessionName, setSessionName]=useState("");
   const LIVEKIT_URL = process.env.NEXT_PUBLIC_LIVEKIT_URL || "ws://localhost:7880";
 
   useEffect(() => {
@@ -26,6 +28,7 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
 
         const data = await response.json();
         if (data.session.token) setToken(data.session.token);
+        if (data.session.session.title) setSessionName(data.session.session.title);
       } catch (error) {
         console.error("Error fetching LiveKit token:", error);
       }
@@ -40,6 +43,7 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
     <LiveKitRoom serverUrl={LIVEKIT_URL} token={token} connect={true}>
      <VideoConference className="lk-video-conference" />
      {/* <ChatListner/> */}
+     <RecordingControl sessionId={sessionId} roomName={sessionName}/>
     </LiveKitRoom>
   );
 };
