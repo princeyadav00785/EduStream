@@ -17,7 +17,7 @@ app.use(cors());
 
 // Middleware
 app.use(express.json());
-// app.use(authMiddleware as unknown as express.RequestHandler);
+app.use(authMiddleware as unknown as express.RequestHandler);
 
 // console.log(authMiddleware);
 // Routes

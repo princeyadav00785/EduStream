@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router"; 
 import socket from "../../config/socket";
 import usePost from "../../hooks/usePost"; 
 
 const CreateSession = () => {
+  const router = useRouter(); 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -16,7 +18,6 @@ const CreateSession = () => {
 
   useEffect(() => {
     socket.connect();
-
     socket.on("connect", () => {
       console.log("Instructor connected with socket ID:", socket.id);
       socket.emit("registerSocket", { socketId: socket.id });
@@ -45,6 +46,10 @@ const CreateSession = () => {
     };
 
     await postData(sessionData);
+
+    if (!error) {
+      router.push("/sessions/allSessions"); 
+    }
   };
 
   return (
@@ -100,10 +105,7 @@ const CreateSession = () => {
           </button>
         </div>
 
-        {/* Error Message */}
         {error && <p className="text-red-500 mt-4 text-center">Error: {error}</p>}
-
-        {/* Success Message */}
         {data && <p className="text-green-500 mt-4 text-center">✅ Session Created Successfully!</p>}
       </div>
     </div>

@@ -1,21 +1,26 @@
 "use client";
 import { useState } from "react";
 
-const RecordingControl: React.FC<{ roomName: string ,sessionId:string}> = ({ roomName,sessionId }) => {
+const RecordingControl: React.FC<{ roomName: string ,sessionId:string,sessionName:string}> = ({ roomName,sessionId,sessionName }) => {
   const [recordingStatus, setRecordingStatus] = useState<string>("");
   const [recordingId, setRecordingId] = useState<string>("");
-
+  const authToken = localStorage.getItem("authToken");
+  
   const startRecording = async () => {
     try {
       const res = await fetch("http://localhost:5003/api/session/recording/start", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ roomName, outputUrl: "",sessionId }), 
+        headers: { "Content-Type": "application/json" , Authorization: authToken ? `Bearer ${authToken}` : "",},
+        body: JSON.stringify({ roomName, outputUrl: "",sessionId,sessionName }), 
       });
-      const data = await res.json();
+      if(res.status==200)
+      {const data = await res.json();
       console.log(data);
       setRecordingId(data.egressId); 
-      setRecordingStatus("Recording started");
+      setRecordingStatus("Recording started");}
+      else {
+        setRecordingStatus("Error starting recording");
+      }
     } catch (error) {
       console.error(error);
       setRecordingStatus("Error starting recording");
@@ -26,7 +31,7 @@ const RecordingControl: React.FC<{ roomName: string ,sessionId:string}> = ({ roo
     try {
       const res = await fetch("http://localhost:5003/api/session/recording/stop", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: authToken ? `Bearer ${authToken}` : "", },
         body: JSON.stringify({ egressId :recordingId }),
       });
       const data = await res.json();

@@ -31,7 +31,10 @@ const usePost = <T extends object>(url: string): ApiResponse<T> => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Failed to post data");
+      if (response.status==403||response.status==500||response.status==400) {
+        const errorData = await response.json(); 
+        throw new Error(errorData?.message || "Failed to post data");  
+      }
 
       const result: T = await response.json();
       setData(result);

@@ -173,15 +173,15 @@ dotenv.config();
 const LIVEKIT_HOST = process.env.LIVEKIT_URL!;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
 const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET!;
-
+const timestamp = Date.now();
 export const startRecording = async (req: Request, res: Response) => {
   try {
-    const { roomName } = req.body;
+    const { roomName,sessionName } = req.body;
 
     const egressClient = new EgressClient(LIVEKIT_HOST, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
 
     const fileOutput = new EncodedFileOutput({
-      filepath: `livekit-recordings/${roomName}.mp4`,
+      filepath: `livekit-recordings/${sessionName}_${timestamp}.mp4`,
       output: {
         case: 's3', 
         value: new S3Upload({

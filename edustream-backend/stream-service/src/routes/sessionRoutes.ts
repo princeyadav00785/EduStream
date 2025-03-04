@@ -3,7 +3,7 @@ import {
     createSession, joinSession, toggleSessionStatus, getAllSessions, getAllActiveSessions, 
     getSessionInfo, searchSessions, kickOutUser, blockUser, endSession 
 } from '../controllers/sessionControllers';
-import { isInstructor } from '../middlewares/isInstructor';
+import { isInstructor, isProfessor } from '../middlewares/isInstructor';
 import { startRecording, stopRecording, 
     // getRecordingStatus, listRecordings, getRecording,livekitWebhook 
 } from "../controllers/recordingController";
@@ -13,7 +13,7 @@ import { startRecording, stopRecording,
 
 const router = Router();
 
-router.post('/create-session', createSession);
+router.post('/create-session', isProfessor,createSession);
 router.post('/join', joinSession);
 router.patch('/toggle-status/:sessionId', isInstructor, toggleSessionStatus);
 router.get('/all', getAllSessions);
