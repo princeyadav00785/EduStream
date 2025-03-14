@@ -33,10 +33,6 @@ enum AccountStatus {
   BLOCKED
 }
 
-enum CourseType {
-  FREE
-  PAID
-}
 
 
 model User {
@@ -56,25 +52,11 @@ model User {
   lastLogin                 DateTime?
   resetToken                String?
   resetTokenExpiration      DateTime?
-  enrolledCourses           Course[]           @relation("UserCourses")
+  enrolledCourses           Json?          
   coursePurchaseDates       Json?               
   createdAt                 DateTime           @default(now())
   updatedAt                 DateTime           @updatedAt
-  courses                   Course[]           @relation("CourseInstructor")
+  courses                   Json?         
 }
 
 
-model Course {
-  id                 Int      @id @default(autoincrement())
-  title              String
-  description        String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  instructor         User?    @relation("CourseInstructor", fields: [instructorId], references: [id]) 
-  instructorId       Int?
-  enrolledUsers      User[]   @relation("UserCourses")
-  purchaseDates      Json     
-  ratings            Float
-  price              Float?     
-  type               CourseType  @default(FREE)
-}
