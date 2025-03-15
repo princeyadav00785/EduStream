@@ -53,6 +53,7 @@ export const getCourseById = async (req: Request, res: Response) => {
   }
 };
 
+
 export const getCourseStudentCount = async (req: Request, res: Response) => {
   try {
     const courseId = Number(req.params.id);
@@ -63,7 +64,7 @@ export const getCourseStudentCount = async (req: Request, res: Response) => {
       return;
     }
 
-    const enrolledUsers = JSON.parse(typeof course.enrolledUsers === "string" ? course.enrolledUsers : "[]");
+    const enrolledUsers = Array.isArray(course.enrolledUsers) ? course.enrolledUsers : [];
     res.json({ studentsCount: enrolledUsers.length });
     return;
   } catch (error) {
@@ -71,3 +72,60 @@ export const getCourseStudentCount = async (req: Request, res: Response) => {
     return;
   }
 };
+
+
+export const enrollUserInCourse = async (req: Request, res: Response) => {
+  const { courseId, userId, username } = req.body;
+
+  if (!courseId || !userId || !username) {
+    res.status(400).json({ message: "Invalid data" });
+    return;
+  }
+
+  try {
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
+    });
+    
+    if (!course) {
+      throw new Error("Course not found");
+    }
+    
+    const enrolledUsersArray = Array.isArray(course.enrolledUsers)
+      ? course.enrolledUsers
+      : [];
+    
+    const purchaseDatesArray = Array.isArray(course.purchaseDates)
+      ? course.purchaseDates
+      : [];
+    
+    const updatedCourse = await prisma.course.update({
+      where: { id: courseId },
+      data: {
+        enrolledUsers: [
+          ...enrolledUsersArray,
+          userId, 
+        ],
+        purchaseDates: [
+          ...purchaseDatesArray,
+          {
+            username: username,
+            date: new Date(),
+          },
+        ],
+      },
+    });
+    
+
+    res.status(200).json({
+      message: "User enrolled successfully",
+      course,
+    });
+    return;
+  } catch (err) {
+    console.error("Error enrolling user:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+    return;
+  }
+};
+

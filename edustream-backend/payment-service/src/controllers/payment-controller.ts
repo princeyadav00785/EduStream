@@ -1,12 +1,14 @@
 import { Request, Response, RequestHandler } from "express";
 import Stripe from "stripe";
 import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, { apiVersion: "2025-02-24.acacia" });
 const prismaAny = prisma as any;
 
 export const createPayment: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+  console.log(`${process.env.COURSE_API_URL}/api/courses/enroll`);
   try {
     const { userId, courseId, amount, name, email, address } = req.body;
 
@@ -43,6 +45,11 @@ export const createPayment: RequestHandler = async (req: Request, res: Response)
           quantity: 1,
         },
       ],
+      metadata: {
+        userId: userId,
+        courseId: courseId,
+        username: name,
+      },    
       mode: "payment",
       success_url: `${process.env.FRONTEND_URL}/payment-sucess/{CHECKOUT_SESSION_ID}`, 
       // success_url: `http://localhost:3000/payment-success?session_id={CHECKOUT_SESSION_ID}`,
@@ -53,7 +60,7 @@ export const createPayment: RequestHandler = async (req: Request, res: Response)
     // console.log("Stripe session created:", session);
 
     try {
-      await prismaAny.payment.create({
+        await prismaAny.payment.create({
         data: { userId, courseId, amount, status: "PENDING", stripeCustomerId: customer.id },
       });
     } catch (error: any) {
@@ -92,6 +99,11 @@ export const stripeWebhook: RequestHandler = async (req: Request, res: Response)
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
+    console.log(session);
+    const userId = session?.metadata?.userId;
+    const courseId = session?.metadata?.courseId;
+    const username = session?.metadata?.username;
+
 
     const stripeCustomerId = session.customer as string;
 
@@ -110,13 +122,24 @@ export const stripeWebhook: RequestHandler = async (req: Request, res: Response)
         where: { id: payment.id },
         data: { status: "SUCCESSFUL" },
       });
+      try {
 
+       const data= await axios.post(`${process.env.COURSE_API_URL}/api/courses/enroll`, {
+          userId,
+          courseId,
+          username,
+        });
+        console.log(data);
+      } catch (error) {
+        console.error("Cant send data to course api.",error);
+      }
       // console.log(`✅ Payment ${payment.id} marked as SUCCESSFUL.`);
     } catch (error) {
       console.error("⚠️ Database update failed:", error);
       res.status(500).json({ error: "Database update failed" });
       return;
     }
+
   }
 
   res.status(200).json({ received: true });
