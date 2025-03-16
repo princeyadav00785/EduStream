@@ -1,9 +1,9 @@
 const LoadingScreen = () => {
   return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
-          <h1 className="text-4xl font-bold text-cyan-400 animate-pulse">EduStream</h1>
-          <div className="w-10 h-10 border-4 border-t-cyan-400 rounded-full animate-spin mt-4"></div>
-      </div>
+    <div className="flex flex-col items-center justify-center h-screen bg-white text-black">
+      <div className="w-16 h-16 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+      <h1 className="mt-4 text-lg font-semibold">Loading...</h1>
+    </div>
   );
 };
 

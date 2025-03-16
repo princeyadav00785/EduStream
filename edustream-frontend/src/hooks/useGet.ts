@@ -17,7 +17,7 @@ const useGet = <T,>(url: string): ApiResponse<T> => {
       setError(null);
 
       const token = localStorage.getItem("authToken");
-
+      console.log(token);
       try {
         const response = await fetch(url, {
           method: "GET",

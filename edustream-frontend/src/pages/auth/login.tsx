@@ -8,32 +8,54 @@ import Link from "next/link";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { GlowingStarsTitle } from "@/components/ui/glowing-stars";
 import { toast } from "react-toastify";
-import usePost from "@/hooks/usePost";  
+import usePost from "@/hooks/usePost"; 
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout } from "@/redux/store";
+import { RootState } from "@/redux/store";
+interface LoginResponse {
+  token: string;
+  userdata: {
+    username: string;
+    id: string;
+    role: string;
+  };
+}
+
 
 export default function LoginFormDemo() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  
   // Use the custom usePost hook
-  const { data, isLoading, isSuccess, error, postData } = usePost<{ token: string }>(
+  const { data, isLoading, isSuccess, error, postData } = usePost<LoginResponse>(
     `${process.env.NEXT_PUBLIC_AUTH_API_URL}/login`
   );
-
+  
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await postData({ username, password });
   };
-
+  
   // Handle success and error states
   useEffect(() => {
     if (isSuccess && data?.token) {
       localStorage.setItem("authToken", data.token);
       toast.success("Login successful! Redirecting...");
+  
+      const userData = {
+        name: data?.userdata.username,
+        id: data?.userdata.id,
+        role: data?.userdata.role,
+      };
+      dispatch(login({ userInfo: userData, token: data.token }));
+  
       router.push("/");
     }
   }, [isSuccess, data, router]);
+  
 
   useEffect(() => {
     if (error) {

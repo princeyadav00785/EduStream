@@ -75,7 +75,13 @@ export const loginUser: RequestHandler = async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id ,role :user.role}, process.env.JWT_SECRET!, { expiresIn: '1h' });
-        res.json({ token });
+        const userdata = { 
+            id: user.id 
+            ,role :user.role,
+            username:user.username
+        }
+
+        res.json({ token,userdata });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

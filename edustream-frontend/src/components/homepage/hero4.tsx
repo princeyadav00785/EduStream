@@ -32,7 +32,7 @@ export function Hero4() {
   return (
     <div className="py-40  flex flex-col items-center justify-center bg-black">
       <Modal>
-        <div className="font-extrabold text-2xl md:text-4xl lg:text-5xl text-white mb-8"> Sounds Intersting ?</div>
+        <div className="font-extrabold text-2xl md:text-4xl lg:text-5xl text-white mb-8 "> Sounds Intersting ?</div>
         <ModalTrigger className="bg-white dark:bg-white dark:text-black text-black flex justify-center group/modal-btn font-extrabold ">
           <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
           {"    "} Join Class today 
@@ -79,7 +79,7 @@ export function Hero4() {
                 </motion.div>
               ))}
             </div>
-            <div className="py-10 flex flex-wrap gap-x-4 gap-y-6 items-start justify-start max-w-sm mx-auto">
+            <div className="py-6 flex flex-wrap gap-x-4 gap-y-4 items-start justify-start max-w-sm mx-auto">
               <div className="flex items-center justify-center">
                 <IconBook className="mr-1 text-neutral-700 dark:text-neutral-300 h-4 w-4" />
                 <span className="text-neutral-700 dark:text-neutral-300 text-sm">
