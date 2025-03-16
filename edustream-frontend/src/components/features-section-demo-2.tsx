@@ -1,65 +1,69 @@
 import { cn } from "@/lib/utils";
 import {
-  IconAdjustmentsBolt,
-  IconCloud,
+  IconAdjustments,
+  IconBook,
+  IconCertificate,
   IconCurrencyDollar,
-  IconEaseInOut,
-  IconHeart,
-  IconHelp,
-  IconRouteAltLeft,
-  IconTerminal2,
+  IconDeviceLaptop,
+  IconRefresh,
+  IconUserCheck,
+  IconUsers,
 } from "@tabler/icons-react";
 
 export default function FeaturesSectionDemo() {
   const features = [
     {
-      title: "Built for developers",
+      title: "Interactive Learning Experience",
       description:
-        "Built for engineers, developers, dreamers, thinkers and doers.",
-      icon: <IconTerminal2 />,
+        "Engage with high-quality video lectures, quizzes, and hands-on projects to enhance your learning journey.",
+      icon: <IconBook />,
     },
     {
-      title: "Ease of use",
+      title: "Personalized Learning Paths",
       description:
-        "It's as easy as using an Apple, and as expensive as buying one.",
-      icon: <IconEaseInOut />,
+        "Get tailored course recommendations and track your progress with our AI-driven learning assistant.",
+      icon: <IconAdjustments />,
     },
     {
-      title: "Pricing like no other",
+      title: "Expert Instructors",
       description:
-        "Our prices are best in the market. No cap, no lock, no credit card required.",
+        "Learn from industry experts and experienced educators who are passionate about teaching.",
+      icon: <IconUserCheck />,
+    },
+    {
+      title: "Affordable Pricing",
+      description:
+        "Access premium courses at an affordable price with flexible payment options.",
       icon: <IconCurrencyDollar />,
     },
     {
-      title: "100% Uptime guarantee",
-      description: "We just cannot be taken down by anyone.",
-      icon: <IconCloud />,
-    },
-    {
-      title: "Multi-tenant Architecture",
-      description: "You can simply share passwords instead of buying new seats",
-      icon: <IconRouteAltLeft />,
-    },
-    {
-      title: "24/7 Customer Support",
+      title: "Certification & Career Support",
       description:
-        "We are available a 100% of the time. Atleast our AI Agents are.",
-      icon: <IconHelp />,
+        "Earn globally recognized certificates and get career guidance to land your dream job.",
+      icon: <IconCertificate />,
     },
     {
-      title: "Money back guarantee",
+      title: "24/7 Community Support",
       description:
-        "If you donot like EveryAI, we will convince you to like us.",
-      icon: <IconAdjustmentsBolt />,
+        "Join a vibrant learning community and get instant support from peers and mentors.",
+      icon: <IconUsers />,
     },
     {
-      title: "And everything else",
-      description: "I just ran out of copy ideas. Accept my sincere apologies",
-      icon: <IconHeart />,
+      title: "Multi-Device Learning",
+      description:
+        "Learn anytime, anywhere on your laptop, tablet, or smartphone.",
+      icon: <IconDeviceLaptop />,
+    },
+    {
+      title: "Regular Updates & New Content",
+      description:
+        "Stay up-to-date with the latest industry trends and new course materials added regularly.",
+      icon: <IconRefresh />,
     },
   ];
+
   return (
-    <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  relative z-10 py-10 max-w-7xl mx-32 md:m-auto ">
+    <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  relative z-10 py-10 max-w-7xl mx-4 sm:mx-6 md:mx-8 lg:mx-20 md:m-auto  max-h-[100vh] overflow-auto ">
       {features.map((feature, index) => (
         <Feature key={feature.title} {...feature} index={index} />
       ))}
@@ -81,7 +85,7 @@ const Feature = ({
   return (
     <div
       className={cn(
-        "flex flex-col lg:border-r  py-10 relative group/feature dark:border-neutral-800",
+        "flex flex-col lg:border-r  py-10 relative group/feature dark:border-neutral-800 ",
         (index === 0 || index === 4) && "lg:border-l dark:border-neutral-800",
         index < 4 && "lg:border-b dark:border-neutral-800"
       )}

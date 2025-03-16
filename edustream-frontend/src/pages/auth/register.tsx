@@ -47,12 +47,12 @@ export default function SignupFormDemo() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4">
-    <div className="absolute top-10 text-center text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black to-black px-4">
+    <div className=" absolute top-10 text-center text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
       EduStream
     </div>
   
-    <div className="w-full max-w-md bg-gray-800 shadow-lg rounded-xl p-6 text-white">
+    <div className="mt-10 w-full max-w-md bg-gradient-to-br from-gray-400 to-gray-950 shadow-lg rounded-xl p-6 text-white">
       <h2 className="text-center text-4xl font-extrabold text-gray-200 mb-6">Sign Up</h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">

@@ -13,13 +13,11 @@ export default function Homepage(){
     return (
         <div className=" ">
          <FloatingNav navItems={NavItems}/>   
-          {/* <div className="flex justify-center items-center bg-black h-[100vh] lg:h-[125vh]"> */}
           <Hero1/>
-          {/* </div> */}
           <Hero2/>
-          {/* <Hero3/> */}
-          {/* <Hero5/> */}
-          {/* <Hero4/> */}
+          <Hero3/>
+          <Hero5/>
+          <Hero4/>
           <Footer/>
         </div>
     )

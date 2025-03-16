@@ -32,7 +32,7 @@ export function Hero4() {
   return (
     <div className="py-40  flex flex-col items-center justify-center bg-black">
       <Modal>
-        <div className="font-extrabold text-5xl text-white mb-8"> Sounds Intersting ?</div>
+        <div className="font-extrabold text-2xl md:text-4xl lg:text-5xl text-white mb-8"> Sounds Intersting ?</div>
         <ModalTrigger className="bg-white dark:bg-white dark:text-black text-black flex justify-center group/modal-btn font-extrabold ">
           <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
           {"    "} Join Class today 
