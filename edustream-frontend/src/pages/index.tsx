@@ -11,15 +11,15 @@ import Footer from "@/components/footer/footer";
 
 export default function Homepage(){
     return (
-        <div className="w-[100vw] ">
+        <div className=" ">
          <FloatingNav navItems={NavItems}/>   
-          <div className="flex justify-center items-center bg-black h-[100vh] lg:h-[125vh]">
+          {/* <div className="flex justify-center items-center bg-black h-[100vh] lg:h-[125vh]"> */}
           <Hero1/>
-          </div>
+          {/* </div> */}
           <Hero2/>
-          <Hero3/>
-          <Hero5/>
-          <Hero4/>
+          {/* <Hero3/> */}
+          {/* <Hero5/> */}
+          {/* <Hero4/> */}
           <Footer/>
         </div>
     )

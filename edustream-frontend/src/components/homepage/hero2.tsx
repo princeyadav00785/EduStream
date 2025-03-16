@@ -1,53 +1,33 @@
-"use client";
-import * as React from "react";
+import { cn } from "@/lib/utils";
+import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import {
+  IconBell,
   IconBroadcast,
+  IconClipboardCopy,
+  IconFileBroken,
   IconLock,
   IconMessageCircle,
-  IconBell,
+  IconSignature,
+  IconTableColumn,
 } from "@tabler/icons-react";
-// import { Vortex } from "../ui/vortex";
-import {  TypewriterEffectSmooth } from "../ui/typewriter-effect";
 
 export function Hero2() {
-    const words =[
-        {
-            text:'"Features ',
-            className:"text-4xl  lg:text-7xl"
-        },
-        {
-            text:' Of ',
-            className:"text-4xl  lg:text-7xl"
-        },
-        {
-            text:'Edustream."',
-            className:"text-4xl  lg:text-7xl"
-        }
-    ]
   return (
-    <div className="bg-black h-[150vh] md:h-[100vh] text-white w-full">
-      {/* <Vortex> */}
-        <div className="mb-24 font-serif font-extrabold flex justify-center items-center w-full">
-          <TypewriterEffectSmooth  words={words}/>
-        </div>
-        <BentoGrid className="max-w-4xl lg:mx-auto  md:auto-rows-[20rem] mx-10 ">
-          {items.map((item, i) => (
-            <BentoGridItem
-              key={i}
-              title={item.title}
-              description={item.description}
-              header={item.header}
-              className={item.className}
-              icon={item.icon}
-            />
-          ))}
-        </BentoGrid>
-      {/* </Vortex> */}
-    </div>
+    <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem] bg-black">
+      {items.map((item, i) => (
+        <BentoGridItem
+          key={i}
+          title={item.title}
+          description={item.description}
+          header={item.header}
+          className={item.className}
+          icon={item.icon}
+        />
+      ))}
+    </BentoGrid>
   );
 }
-
 const Skeleton = () => (
   <div className=" flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2]  border border-transparent dark:border-white/[0.2] bg-white dark:bg-black"></div>
 );
