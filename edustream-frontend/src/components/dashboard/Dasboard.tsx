@@ -9,8 +9,8 @@ const Dashboard = () => {
   const sections = [
     { title: "All Sessions", link: "/sessions/allSessions", icon: <FaPlayCircle /> },
     { title: "Create Session", link: "/sessions/createSession", icon: <FaPlus />, adminOnly: true },
-    { title: "Join a Session", link: "/sessions/join/[id]", icon: <FaVideo /> },
-    { title: "Session Details", link: "/session/[id]", icon: <FaVideo /> },
+    { title: "Join a Session", link: "/join-session", icon: <FaVideo /> },
+    { title: "Session Details", link: "/sessions-detail", icon: <FaVideo /> },
     { title: "All Courses", link: "/courses/allCourses", icon: <FaBookOpen /> },
     { title: "Add New Course", link: "/courses/addCourses", icon: <FaPlus />, adminOnly: true },
     { title: "Bought Courses", link: "/bought-courses", icon: <FaShoppingCart /> },

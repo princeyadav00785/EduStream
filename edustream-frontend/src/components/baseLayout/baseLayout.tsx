@@ -26,7 +26,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const isTeacherOrAdmin =
-    userInfo?.role === "teacher" || userInfo?.role === "admin";
+    userInfo?.role === "TEACHER" || userInfo?.role === "ADMIN";
   type LinkWithHref = {
     label: string;
     href: string;
@@ -42,7 +42,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
   type LinkType = LinkWithHref | LinkWithAction;
 
   const links: LinkType[] = [
-    { label: "Dashboard", href: "/dashboard", icon: <IconBrandTabler /> },
+    { label: "Dashboard", href: "/", icon: <IconBrandTabler /> },
     {
       label: "All Sessions",
       href: "/sessions/allSessions",
@@ -50,10 +50,10 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
     },
     {
       label: "Join a Session",
-      href: "/sessions/join/[id]",
+      href: "/join-session",
       icon: <IconVideo />,
     },
-    { label: "Session Details", href: "/session/[id]", icon: <IconVideo /> },
+    { label: "Session Details", href: "/sessions-detail", icon: <IconVideo /> },
     isTeacherOrAdmin && {
       label: "Create New Session",
       href: "/sessions/createSession",
@@ -65,7 +65,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
       href: "/courses/addCourses",
       icon: <IconPlus />,
     },
-    { label: "Course Details", href: "/course/[id]", icon: <IconBook /> },
+    { label: "Course Details", href: "/courses-detail", icon: <IconBook /> },
     { label: "Profile", href: "/profile", icon: <IconUserBolt /> },
     { label: "Settings", href: "/settings", icon: <IconSettings /> },
     {
@@ -78,6 +78,8 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
         persistor.pause();
         await persistor.flush();
         persistor.purge();
+        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        window.location.reload();
         router.push("/");
       },
     },
@@ -134,7 +136,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
       style={{
         width: open ? `calc(100vw - 300px)` : `100vw`,
       }}>
-        <div className="p-2  md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 ">
+        <div className="rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 ">
           {children}
         </div>
         <Footer />

@@ -1,17 +1,17 @@
-import ReduxProvider from "@/redux/Provider";
-import "../styles/globals.css";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import "tailwindcss/tailwind.css";
+import { Provider } from "react-redux";
+import store from "@/redux/store";
+import "@/styles/globals.css";
+import { ToastContainer } from "react-toastify";
+
+import AuthGuard from "@/components/auth/AuthGuard";
 
 export default function App({ Component, pageProps }: { Component: any; pageProps: any }) {
   return (
-    <>
-    <ReduxProvider>
-    <Component {...pageProps} />
-    <ToastContainer />
-    </ReduxProvider>
-    </>
+    <Provider store={store}>
+      <AuthGuard>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </AuthGuard>
+    </Provider>
   );
 }
-

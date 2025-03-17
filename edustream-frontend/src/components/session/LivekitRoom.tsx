@@ -21,10 +21,11 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
   useEffect(() => {
     const fetchToken = async () => {
       try {
+        const socketId= localStorage.getItem("socketId");
         const response = await fetch("http://localhost:5003/api/session/join", {
           method: "POST",
           headers: { "Content-Type": "application/json" , Authorization: authToken ? `Bearer ${authToken}` : "",},
-          body: JSON.stringify({ userId, sessionId ,"socketId": "sampleid"}),
+          body: JSON.stringify({ userId, sessionId ,"socketId": socketId}),
         });
 
         const data = await response.json();

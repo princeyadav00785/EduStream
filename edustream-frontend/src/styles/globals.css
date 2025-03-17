@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+.input-label {
+  @apply text-sm font-medium text-gray-700 mb-2 block;
+}
+
+.input-field {
+  @apply w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500;
+}
+body {
+  transition: background-color 0.2s ease-in-out;
+}
+
 
 @font-face {
   font-family: 'GeistSans';

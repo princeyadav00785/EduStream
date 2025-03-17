@@ -44,6 +44,7 @@ export default function LoginFormDemo() {
     if (isSuccess && data?.token) {
       localStorage.setItem("authToken", data.token);
       toast.success("Login successful! Redirecting...");
+      document.cookie = `token=yourTokenHere; path=/`;
   
       const userData = {
         name: data?.userdata.username,
