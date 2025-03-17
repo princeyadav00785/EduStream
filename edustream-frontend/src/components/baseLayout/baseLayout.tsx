@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
+import avatar from '../../../public/avatar.png';
 import {
   IconArrowLeft,
   IconBook,
@@ -120,7 +121,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
                 href: "#",
                 icon: (
                   <Image
-                    src="https://assets.aceternity.com/manu.png"
+                    src={avatar}
                     className="h-7 w-7 shrink-0 rounded-full"
                     width={50}
                     height={50}
