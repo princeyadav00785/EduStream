@@ -1,4 +1,8 @@
+import { logout } from "@/redux/store";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 
 interface ApiResponse<T> {
   data: T | null;
@@ -10,7 +14,9 @@ const useGet = <T,>(url: string): ApiResponse<T> => {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
+  const dispatch = useDispatch();
+ const router = useRouter();
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -26,7 +32,12 @@ const useGet = <T,>(url: string): ApiResponse<T> => {
             Authorization: token ? `Bearer ${token}` : "",
           },
         });
-
+        if (response.status === 403) {
+          dispatch(logout()); 
+          localStorage.removeItem("authToken"); 
+          router.push("/");
+          return;
+        }
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: T = await response.json();

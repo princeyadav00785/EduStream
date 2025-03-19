@@ -6,6 +6,8 @@ import { LiveKitRoom,
 import "@livekit/components-styles"; 
 import ChatListner from "./ChatListener";
 import RecordingControl from "../recording/RecordingControl";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface LiveKitRoomProps {
   userId: string;
@@ -13,6 +15,11 @@ interface LiveKitRoomProps {
 }
 
 const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId }) => {
+  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  let userRole:string ="STUDENT";
+  if (userInfo != null) {
+    userRole = userInfo.role;
+  }
   const [token, setToken] = useState<string | null>(null);
   const [sessionName, setSessionName]=useState("");
   const [roomName,setRoomName]=useState("");
@@ -46,7 +53,8 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
     <LiveKitRoom serverUrl={LIVEKIT_URL} token={token} connect={true}>
      <VideoConference className="lk-video-conference" />
      {/* <ChatListner/> */}
-     <RecordingControl sessionId={sessionId} sessionName={sessionName} roomName={roomName}/>
+
+    {userRole!=="STUDENT"&& <RecordingControl sessionId={sessionId} sessionName={sessionName} roomName={roomName}/>}
     </LiveKitRoom>
   );
 };

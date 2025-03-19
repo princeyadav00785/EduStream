@@ -36,7 +36,7 @@ const BoughtCourses = () => {
   const boughtCourses = courses.filter((course:Course) => enrolledCourseIds.has(course.id.toString()));
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="mt-20 max-w-4xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Your Bought Courses</h2>
       {boughtCourses.length === 0 ? (
         <p>No courses purchased yet.</p>
