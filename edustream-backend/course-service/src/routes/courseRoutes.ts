@@ -10,12 +10,12 @@ import { authMiddleware, isProfessor } from "../middlewares/isInstructor";
 import express from "express";
 
 const router = Router();
-
-router.get("/",authMiddleware as unknown as express.RequestHandler ,getAllCourses);
-router.get("/:id",authMiddleware as unknown as express.RequestHandler , getCourseById);
-router.get("/:id/students-count", authMiddleware as unknown as express.RequestHandler ,getCourseStudentCount);
-router.post("/",authMiddleware as unknown as express.RequestHandler ,isProfessor, createCourse);
 router.post("/enroll", enrollUserInCourse);
+router.get("/",authMiddleware as unknown as express.RequestHandler ,getAllCourses);
+router.get("/:id/students-count", authMiddleware as unknown as express.RequestHandler ,getCourseStudentCount);
+router.get("/:id",authMiddleware as unknown as express.RequestHandler , getCourseById);
+router.post("/",authMiddleware as unknown as express.RequestHandler ,isProfessor, createCourse);
+
 
 
 export default router;

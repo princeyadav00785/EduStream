@@ -24,7 +24,8 @@ const CourseDetail = ({ id }: { id: string | string[] | undefined }) => {
   const router = useRouter();
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const isStudent = (userInfo?.role==="STUDENT")?false:true;
-  const userId= userInfo?.id;
+  const userID= userInfo?.id.toString();
+  console.log(`user id is  ${userID}`);
   const { data: course, isLoading: courseLoading, error: courseError } = useGet<Course>(
     id ? `${process.env.NEXT_PUBLIC_COURSE_API_BASE_URL}api/courses/${String(id)}` : ""
   );
@@ -53,7 +54,7 @@ const CourseDetail = ({ id }: { id: string | string[] | undefined }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: userId,
+          userId: userID,
           name: userDetails.name,
           email: userDetails.email,
           courseId: `${course.id}`,

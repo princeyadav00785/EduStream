@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors'; // Import the CORS middleware
-import { registerUser, loginUser,apiStatus } from './src/controllers/authController';
+import { registerUser, loginUser,apiStatus, enrollUserInCourse, getUserProfile } from './src/controllers/authController';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/api/auth/register', registerUser);
 app.post('/api/auth/login', loginUser);
 app.get('/api/status',apiStatus);
+app.post('/api/enroll-course',enrollUserInCourse);
+app.get('/api/auth/profile/:userId', getUserProfile);
 
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

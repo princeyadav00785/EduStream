@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../prisma/client";
+import { error } from "console";
 
 export const createCourse = async (req: Request, res: Response) => {
     try {
@@ -77,6 +78,7 @@ export const getCourseStudentCount = async (req: Request, res: Response) => {
 
 
 export const enrollUserInCourse = async (req: Request, res: Response) => {
+  console.log("hitting enroll user controller...");
   const { courseId, userId, username } = req.body;
 
   if (!courseId || !userId || !username) {
@@ -126,7 +128,7 @@ export const enrollUserInCourse = async (req: Request, res: Response) => {
     return;
   } catch (err) {
     console.error("Error enrolling user:", err);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: `Internal Server Error : ${error}` });
     return;
   }
 };

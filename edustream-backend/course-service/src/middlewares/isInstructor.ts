@@ -44,7 +44,7 @@ export const authMiddleware = async(req: AuthenticatedRequest, res: Response, ne
     // console.log(response);
     if (response.data.valid) {
       req.user = { id: response.data.userId, role: response.data.role }; 
-      // console.log(`role of user : ${req.user.id}, ${req.user.role}`);
+    //   console.log(`role of user : ${req.user.id}, ${req.user.role}`);
       next();
     } else {
      return res.status(403).json({ error: "Invalid token" });

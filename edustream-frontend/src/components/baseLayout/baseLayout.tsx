@@ -27,9 +27,10 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   let userName: string = "Guest";
-
+  let userId:string ="user";
   if (userInfo != null) {
     userName = userInfo.name;
+    userId=userInfo.id;
   }
 
   const isTeacherOrAdmin =
@@ -73,7 +74,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
       icon: <IconPlus />,
     },
     { label: "Course Details", href: "/courses-detail", icon: <IconBook /> },
-    { label: "Profile", href: "/profile", icon: <IconUserBolt /> },
+    { label: "Profile", href: `/profile`, icon: <IconUserBolt /> },
     { label: "Settings", href: "/settings", icon: <IconSettings /> },
     {
       label: "Logout",

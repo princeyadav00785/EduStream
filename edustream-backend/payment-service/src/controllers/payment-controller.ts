@@ -13,6 +13,7 @@ export const createPayment: RequestHandler = async (req: Request, res: Response)
   console.log(`${process.env.COURSE_API_URL}/api/courses/enroll`);
   try {
     const { userId, courseId, amount, name, email, address } = req.body;
+    console.log(`user id is :${userId}`);
 
     if (!userId || !courseId || !amount || !name || !email || !address) {
       res.status(400).json({ error: "Missing required fields" });
@@ -124,20 +125,38 @@ export const stripeWebhook: RequestHandler = async (req: Request, res: Response)
         data: { status: "SUCCESSFUL" },
       });
       try {
+        const CourseIdNum = Number(courseId);
 
        const data= await axios.post(`${process.env.COURSE_API_URL}/api/courses/enroll`, {
           userId,
-          courseId,
+          courseId:CourseIdNum,
           username,
         });
-        console.log(data);
+        console.log(`Course API DATA: ${data}`);
       } catch (error) {
         console.error("Cant send data to course api.",error);
       }
       // console.log(`✅ Payment ${payment.id} marked as SUCCESSFUL.`);
+
+      try {
+       const data= await axios.post(`${process.env.AUTH_API_URL}/api/enroll-course`, {
+          userId,
+          courseId,
+        });
+        console.log(`User API DATA: ${data}`);
+      } catch (error) {
+        console.error("Cant send data to USER api.",error);
+      }
     } catch (error) {
       console.error("⚠️ Database update failed:", error);
       res.status(500).json({ error: "Database update failed" });
+      return;
+    }
+    try {
+      
+    } catch (error) {
+      console.error("⚠️ Database update failed:", error);
+      res.status(500).json({ error: " USER Database update failed" });
       return;
     }
 

@@ -1,50 +1,16 @@
-"use client";
-// http://localhost:3000/payment-status/cs_test_a154sUhgCG7QZyVCuCPUViDXoX0Nxt3MgFxHU5BvBTZ7oPdE54KroWpL3n
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { BaseLayout } from '@/components/baseLayout/baseLayout'
+import PaymentSuccessPage from '@/components/payment/payment-sucess'
+import React from 'react'
 
-const PaymentSuccessPage = () => {
-  const router = useRouter();
-  const { stripeId } = router.query;
-  const [paymentDetails, setPaymentDetails] = useState<any>(null);
-
-  useEffect(() => {
-    if (!stripeId) return;
-
-    const fetchPaymentDetails = async () => {
-      try {
-        const res = await fetch(`http://localhost:4003/api/payment/payment-status?session_id=${stripeId}`);
-        if (!res.ok) throw new Error("Failed to fetch payment details");
-
-        const data = await res.json();
-        setPaymentDetails(data.paymentData);
-      } catch (error) {
-        console.error("Error fetching payment details:", error);
-      }
-    };
-
-    fetchPaymentDetails();
-  }, [stripeId]);
+function PaymentSucessScreen() {
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold text-green-600">Payment Successful! ✅</h1>
-      <p className="text-gray-600 mt-2">Thank you for your purchase.</p>
-
-      {paymentDetails && (
-        <div className="mt-4 p-4 bg-gray-100 rounded shadow-md">
-          <p><strong>Transaction ID:</strong> {paymentDetails.id}</p>
-          <p><strong>Amount Paid:</strong> ₹{paymentDetails.amount / 100}</p>
-          <p><strong>Status:</strong> {paymentDetails.status}</p>
-        </div>
-      )}
-
-      <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        onClick={() => window.location.href = "/courses/allCourses"}>
-        Go to Home
-      </button>
+    <div>
+      <BaseLayout>
+      <PaymentSuccessPage />
+      </BaseLayout>
     </div>
-  );
-};
+  )
+}
 
-export default PaymentSuccessPage;
+export default PaymentSucessScreen

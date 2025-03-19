@@ -18,6 +18,8 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.post('/api/auth/register', authController_1.registerUser);
 app.post('/api/auth/login', authController_1.loginUser);
 app.get('/api/status', authController_1.apiStatus);
+app.post('/api/enroll-course', authController_1.enrollUserInCourse);
+app.get('/api/auth/profile/:userId', authController_1.getUserProfile);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
