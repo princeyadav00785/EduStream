@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import useGet from "@/hooks/useGet"; // ✅ Import useGet hook
 
 interface Course {
   id: number;
@@ -16,18 +16,9 @@ interface Course {
 }
 
 const AllCourses = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_COURSE_API_BASE_URL}api/courses`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCourses(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  const { data: courses, isLoading, error } = useGet<Course[]>(
+    `${process.env.NEXT_PUBLIC_COURSE_API_BASE_URL}api/courses`
+  );
 
   return (
     <div className="max-w-6xl mx-auto p-8">
@@ -35,7 +26,15 @@ const AllCourses = () => {
         📚 Explore Top Courses
       </h2>
 
-      {loading ? (
+      {/* Error Message */}
+      {error && (
+        <p className="text-red-500 text-center text-lg font-semibold">
+          ❌ {error}
+        </p>
+      )}
+
+      {/* Loading Skeleton */}
+      {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-pulse">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="bg-gray-200 h-64 rounded-xl"></div>
@@ -43,7 +42,7 @@ const AllCourses = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course) => (
+          {courses?.map((course) => (
             <div
               key={course.id}
               className="relative bg-white rounded-2xl p-6 shadow-lg border border-gray-100 

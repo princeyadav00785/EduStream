@@ -20,7 +20,8 @@ export const createCourse = async (req: Request, res: Response) => {
   
       res.status(201).json(newCourse);
     } catch (error) {
-      res.status(500).json({ error: "Failed to create course" });
+      console.log(error);
+      res.status(500).json({ error: `Failed to create course, ${error}` });
     }
   };
 
@@ -30,7 +31,8 @@ export const getAllCourses = async (req: Request, res: Response) => {
     res.json(courses);
     return;
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    console.log(error);
+    res.status(500).json({ error: `Internal server error : ${error}` });
     return;
   }
 };

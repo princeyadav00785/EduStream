@@ -8,6 +8,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, { apiVersion:
 const prismaAny = prisma as any;
 
 export const createPayment: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+  const token = req.headers.authorization?.split(" ")[1];
+  console.log(req.headers.authorization);
   console.log(`${process.env.COURSE_API_URL}/api/courses/enroll`);
   try {
     const { userId, courseId, amount, name, email, address } = req.body;
@@ -52,7 +54,6 @@ export const createPayment: RequestHandler = async (req: Request, res: Response)
       },    
       mode: "payment",
       success_url: `${process.env.FRONTEND_URL}/payment-sucess/{CHECKOUT_SESSION_ID}`, 
-      // success_url: `http://localhost:3000/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.FRONTEND_URL}/payment-failed/{CHECKOUT_SESSION_ID}`,
     });
     

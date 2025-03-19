@@ -20,13 +20,19 @@ export const registerUser: RequestHandler = async (req, res) => {
     } = req.body;
     
     try {
+        if (!username || !password || !firstName || !lastName || !email) {
+             res.status(400).json({ message: 'All required fields must be filled' });
+             return;
+        }
+
         // Check if user exists
         const existingUser = await prisma.user.findUnique({
             where: { username },
         });
+        // console.log(existingUser);
         if (existingUser) {
             res.status(400).json({ message: 'User already exists' });
-            return; // End the function after sending the response
+            return; 
         }
 
         // Hash password
@@ -44,13 +50,13 @@ export const registerUser: RequestHandler = async (req, res) => {
                 imageLink,
                 dateOfBirth,
                 address,
-                coursePurchaseDates: [], // Provide an empty array for coursePurchaseDates
+                coursePurchaseDates: [], 
             },
         });
 
         res.status(201).json({ message: 'User registered successfully', user });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error); 
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -60,18 +66,22 @@ export const loginUser: RequestHandler = async (req, res) => {
     const { username, password } = req.body;
 
     try {
+        if (!username || !password) {
+            res.status(400).json({ message: 'Username and password are required' });
+            return;
+        }
         const user = await prisma.user.findUnique({
             where: { username },
         });
         if (!user) {
             res.status(400).json({ message: 'Invalid credentials' });
-            return; // End the function after sending the response
+            return; 
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             res.status(400).json({ message: 'Invalid credentials' });
-            return; // End the function after sending the response
+            return; 
         }
 
         const token = jwt.sign({ id: user.id ,role :user.role}, process.env.JWT_SECRET!, { expiresIn: '1h' });
@@ -81,6 +91,8 @@ export const loginUser: RequestHandler = async (req, res) => {
             username:user.username
         }
 
+        // console.log(`userdata is :${userdata}`);
+        
         res.json({ token,userdata });
     } catch (error) {
         console.error(error);

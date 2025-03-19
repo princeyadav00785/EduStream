@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
-import avatar from '../../../public/avatar.png';
+import avatar from "../../../public/avatar.png";
 import {
   IconArrowLeft,
   IconBook,
@@ -26,6 +26,12 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  let userName: string = "Guest";
+
+  if (userInfo != null) {
+    userName = userInfo.name;
+  }
+
   const isTeacherOrAdmin =
     userInfo?.role === "TEACHER" || userInfo?.role === "ADMIN";
   type LinkWithHref = {
@@ -79,8 +85,9 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
         persistor.pause();
         await persistor.flush();
         persistor.purge();
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-        window.location.reload();
+        document.cookie =
+          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        // window.location.reload();
         router.push("/");
       },
     },
@@ -117,7 +124,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
           <div>
             <SidebarLink
               link={{
-                label: "Prince Yadav",
+                label: userName,
                 href: "#",
                 icon: (
                   <Image
@@ -133,10 +140,12 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarBody>
       </Sidebar>
-      <div className="flex flex-col min-h-full  overflow-y-auto "
-      style={{
-        width: open ? `calc(100vw - 300px)` : `100vw`,
-      }}>
+      <div
+        className="flex flex-col min-h-full  overflow-y-auto "
+        style={{
+          width: open ? `calc(100vw - 300px)` : `100vw`,
+        }}
+      >
         <div className="rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 ">
           {children}
         </div>
