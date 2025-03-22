@@ -68,51 +68,74 @@ export default function LoginFormDemo() {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black to-black px-4">
-      <div className="absolute top-10 text-center text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-        EduStream
-      </div>
+<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black to-gray-900 px-4 relative">
 
-      <div className="w-full max-w-md bg-gradient-to-br from-gray-500 to-gray-950 shadow-lg rounded-xl p-6 text-white">
-        <h2 className="text-center text-4xl font-extrabold text-gray-200 mb-6">Login</h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              placeholder="Enter your username"
-              value={username}  // ✅ Controlled input
-              onChange={(e) => setUsername(e.target.value)} // ✅ Updates state
-              className="border border-gray-600 focus:border-cyan-400 bg-gray-900 text-white p-3 rounded-md w-full"
-            />
-          </div>
+  <h1 className="absolute top-10 text-center text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 drop-shadow-lg">
+  <Link href="/">
+   Edustream
+  </Link>
+  </h1>
 
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}  
-              onChange={(e) => setPassword(e.target.value)} 
-              className="border border-gray-600 focus:border-cyan-400 bg-gray-900 text-white p-3 rounded-md w-full"
-            />
-          </div>
+  <div className="w-full max-w-4xl flex flex-col md:flex-row bg-gray-900 shadow-2xl rounded-xl overflow-hidden border border-gray-700">
 
-          <button
-            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-2 rounded-lg transition-all duration-300 font-semibold"
-            type="submit"
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </button>
-        </form>
+    <div className="hidden md:flex w-1/2 items-center justify-center bg-gradient-to-br from-gray-700 to-gray-950 relative">
+      <img
+        src="/i7.jpg"
+        alt="Login Illustration"
+        className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
+    </div>
 
-        <div className="mt-6 text-center text-gray-400">
-          New to EduStream?  
-          <Link href="/auth/register" className="text-cyan-400 hover:underline"> Signup here</Link>
+    <div className="w-full md:w-1/2 p-8 text-white flex flex-col justify-center">
+      <h2 className="text-center text-4xl font-extrabold text-gray-200 mb-6">Sign In</h2>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+
+        <div>
+          <label htmlFor="username" className="block text-gray-400 font-semibold mb-2">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="border border-gray-700 focus:border-cyan-400 bg-gray-800 text-white p-3 rounded-lg w-full transition-all duration-300 focus:ring-2 focus:ring-cyan-500 outline-none"
+          />
         </div>
+
+        <div>
+          <label htmlFor="password" className="block text-gray-400 font-semibold mb-2">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border border-gray-700 focus:border-cyan-400 bg-gray-800 text-white p-3 rounded-lg w-full transition-all duration-300 focus:ring-2 focus:ring-cyan-500 outline-none"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+        >
+          {isLoading ? "Signing In..." : "Sign In"}
+        </button>
+      </form>
+
+      {/* Signup Link */}
+      <div className="mt-6 text-center text-gray-400">
+        New to EduStream?  
+        <a href="/auth/register" className="text-cyan-400 hover:underline ml-1 transition-all duration-300">Sign up here</a>
       </div>
     </div>
+  </div>
+</div>
+
+  
   );
 }
