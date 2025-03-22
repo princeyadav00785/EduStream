@@ -80,7 +80,7 @@ export default function LoginFormDemo() {
 
     <div className="hidden md:flex w-1/2 items-center justify-center bg-gradient-to-br from-gray-700 to-gray-950 relative">
       <img
-        src="/i7.jpg"
+        src="/i1.jpg"
         alt="Login Illustration"
         className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-300"
       />
