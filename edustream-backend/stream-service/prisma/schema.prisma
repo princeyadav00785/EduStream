@@ -37,6 +37,9 @@ model Recording {
   s3Key       String
   duration    Int?
   createdAt   DateTime @default(now())
+  instructorName  String?
+  description     String?
+
 }
 
 enum SessionType {

@@ -262,10 +262,11 @@ export const streamRecording = async (req: Request, res: Response) => {
     const recording = await prisma.recording.findUnique({ where: { id } });
 
     if (!recording) {
-      return res.status(404).json({ success: false, message: "Recording not found" });
+       res.status(404).json({ success: false, message: "Recording not found" });
+       return;
     }
 
-    // Generated signed URL (valid for 1 hour)
+    // Generated signed URL (valid for 1 hour) , will extend its timer later....
     const url = s3.getSignedUrl("getObject", {
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: recording.s3Key,

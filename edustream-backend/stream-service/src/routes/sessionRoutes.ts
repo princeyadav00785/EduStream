@@ -4,7 +4,7 @@ import {
     getSessionInfo, searchSessions, kickOutUser, blockUser, endSession 
 } from '../controllers/sessionControllers';
 import { isInstructor, isProfessor } from '../middlewares/isInstructor';
-import { getAllRecordings, startRecording, stopRecording, 
+import { getAllRecordings, startRecording, stopRecording, streamRecording, 
     // getRecordingStatus, listRecordings, getRecording,livekitWebhook 
 } from "../controllers/recordingController";
 
@@ -33,7 +33,7 @@ router.post("/recording/stop", stopRecording);
 // router.get("/recording/status/:recordingId", getRecordingStatus);
 // // List All Recordings
 router.get("/recording/list", getAllRecordings);
-// router.get("/recording/stream/:id", streamRecording);
+router.get("/recording/stream/:id", streamRecording);
 
 // // Get Specific Recording
 // router.get("/recording/:recordingId", getRecording);
