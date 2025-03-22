@@ -167,6 +167,9 @@
 import { Request, Response } from 'express';
 import { EgressClient, EncodedFileOutput, S3Upload } from 'livekit-server-sdk';
 import dotenv from 'dotenv';
+import { PrismaClient } from '.prisma/client';
+const prisma = new PrismaClient();
+import AWS from "aws-sdk";
 
 dotenv.config();
 
@@ -179,9 +182,11 @@ export const startRecording = async (req: Request, res: Response) => {
     const { roomName,sessionName } = req.body;
 
     const egressClient = new EgressClient(LIVEKIT_HOST, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
+    const timestamp = Date.now();
+    const s3Key = `livekit-recordings/${sessionName}_${timestamp}.mp4`;
 
     const fileOutput = new EncodedFileOutput({
-      filepath: `livekit-recordings/${sessionName}_${timestamp}.mp4`,
+      filepath: s3Key,
       output: {
         case: 's3', 
         value: new S3Upload({
@@ -201,6 +206,13 @@ export const startRecording = async (req: Request, res: Response) => {
         // customBaseUrl: 'https://your-custom-template-url.com', 
       }
     );
+    await prisma.recording.create({
+      data: {
+        sessionName,
+        roomName,
+        s3Key,
+      },
+    });
 
     res.status(200).json({
       message: 'Recording started',
@@ -225,5 +237,43 @@ export const stopRecording = async (req: Request, res: Response) => {
   } catch (error:any) {
     console.error('Failed to stop recording:', error);
     res.status(500).json({ error: 'Failed to stop recording', details: error });
+  }
+};
+
+export const getAllRecordings = async (req: Request, res: Response) => {
+  try {
+    const recordings = await prisma.recording.findMany();
+    res.json({ success: true, recordings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch recordings" });
+  }
+};
+
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  region: process.env.AWS_REGION!,
+});
+
+export const streamRecording = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const recording = await prisma.recording.findUnique({ where: { id } });
+
+    if (!recording) {
+      return res.status(404).json({ success: false, message: "Recording not found" });
+    }
+
+    // Generated signed URL (valid for 1 hour)
+    const url = s3.getSignedUrl("getObject", {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: recording.s3Key,
+      Expires: 3600, 
+    });
+
+    res.json({ success: true, url });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error fetching recording URL" });
   }
 };

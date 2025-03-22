@@ -14,18 +14,17 @@ const LIVEKIT_URL = process.env.LIVEKIT_URL!;
  * @param {boolean} includeRecording - If true, grants recording (roomRecord) permissions.
  * @returns {string} - JWT token for authentication.
  */
-export const generateLiveKitToken = async (userId: string, sessionId: string, includeRecording = false): Promise<string> => {
+export const generateLiveKitToken = async (userName: string, sessionId: string, includeRecording = false): Promise<string> => {
     const videoGrant: VideoGrant = {
         roomJoin: true,
         room: sessionId,
     };
-
     // If recording is needed, grant recording permissions
     if (includeRecording) {
         videoGrant.roomRecord = true;
     }
 
-    const token = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, { identity: userId });
+    const token = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, { identity: userName });
     token.addGrant(videoGrant);
 
     return await token.toJwt();

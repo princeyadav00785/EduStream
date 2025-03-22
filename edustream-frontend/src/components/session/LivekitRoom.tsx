@@ -12,9 +12,10 @@ import { RootState } from "@/redux/store";
 interface LiveKitRoomProps {
   userId: string;
   sessionId: string;
+  userName: string|undefined;
 }
 
-const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId }) => {
+const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId ,userName}) => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   let userRole:string ="STUDENT";
   if (userInfo != null) {
@@ -32,7 +33,7 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
         const response = await fetch("http://localhost:5003/api/session/join", {
           method: "POST",
           headers: { "Content-Type": "application/json" , Authorization: authToken ? `Bearer ${authToken}` : "",},
-          body: JSON.stringify({ userId, sessionId ,"socketId": socketId}),
+          body: JSON.stringify({userName, userId, sessionId ,"socketId": socketId}),
         });
 
         const data = await response.json();
@@ -50,12 +51,16 @@ const LiveKitRoomComponent: React.FC<LiveKitRoomProps> = ({ userId, sessionId })
   if (!token) return <p>Loading session...</p>;
 
   return (
-    <LiveKitRoom serverUrl={LIVEKIT_URL} token={token} connect={true}>
+   <div className="my-10 min-h-[50vh]">
+     <LiveKitRoom serverUrl={LIVEKIT_URL} token={token} connect={true}>
      <VideoConference className="lk-video-conference" />
      {/* <ChatListner/> */}
+    <div className="absolute top-10 left-0 lg:left-10">
 
     {userRole!=="STUDENT"&& <RecordingControl sessionId={sessionId} sessionName={sessionName} roomName={roomName}/>}
+    </div>
     </LiveKitRoom>
+   </div>
   );
 };
 

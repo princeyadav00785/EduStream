@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,39 +8,44 @@ datasource db {
 }
 
 model Session {
-
-  id             String      @id @default(uuid())
-  title          String
-  description    String?
-  instructorId   String      
-  createdAt     DateTime    @default(now())
-  endTime        DateTime?
-  isActive       Boolean     @default(true)
-  clients   Json        
-  recordingLink  String?
+  id              String      @id @default(uuid())
+  title           String
+  description     String?
+  instructorId    String
+  createdAt       DateTime    @default(now())
+  endTime         DateTime?
+  isActive        Boolean     @default(true)
+  clients         Json
+  recordingLink   String?
   maxParticipants Int?
-  sessionType    SessionType @default(LIVE)
-  tags           String[]    @default([])
-  visibility     Visibility  @default(PUBLIC)
-  duration       Int?
-  waitingList    Json
+  sessionType     SessionType @default(LIVE)
+  tags            String[]    @default([])
+  visibility      Visibility  @default(PUBLIC)
+  duration        Int?
+  waitingList     Json
   category        String?
-  reviewCount     Int?       @default(0) 
+  instructorName  String?
   rating          Float?
+  reviewCount     Int?        @default(0)
   thumbnail       String?
-  instructorName  String?      
 }
 
+model Recording {
+  id          String   @id @default(uuid())
+  sessionName String
+  roomName    String
+  s3Key       String
+  duration    Int?
+  createdAt   DateTime @default(now())
+}
 
 enum SessionType {
-
   LIVE
   RECORDED
   HYBRID
 }
 
 enum Visibility {
-
   PUBLIC
   PRIVATE
 }

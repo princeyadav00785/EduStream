@@ -30,7 +30,7 @@ class SessionService {
     });
   }
 
-  async joinSession(sessionId: string, userId: string, socketId: string) {
+  async joinSession(sessionId: string, userId: string, socketId: string,userName:string) {
     const session = await prisma.session.findUnique({
       where: { id: sessionId },
     });
@@ -52,8 +52,8 @@ class SessionService {
     >;
     clients[userId] = { socketId, muted: false };
 
-    io.to(sessionId).emit("userJoined", { userId });
-    const token = await generateLiveKitToken(userId, sessionId);
+    io.to(sessionId).emit("userJoined", { userName });
+    const token = await generateLiveKitToken(userName, sessionId);
     const updatedSession = await prisma.session.update({
       where: { id: sessionId },
       data: { clients },

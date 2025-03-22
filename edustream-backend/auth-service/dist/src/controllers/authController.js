@@ -158,8 +158,8 @@ exports.enrollUserInCourse = enrollUserInCourse;
 const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        console.log("inside profile controller");
-        console.log(userId);
+        // console.log("inside profile controller");
+        // console.log(userId);
         const numericUserId = Number(userId);
         if (isNaN(numericUserId)) {
             res.status(400).json({ message: "Invalid userId" });

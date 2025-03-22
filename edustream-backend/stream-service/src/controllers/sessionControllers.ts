@@ -18,8 +18,8 @@ export const createSession = async (req: Request, res: Response) => {
 
 export const joinSession = async (req: Request, res: Response) => {
   try {
-    const { sessionId, userId, socketId } = req.body;
-    const session = await sessionService.joinSession(sessionId, userId, socketId);
+    const { sessionId, userId, socketId ,userName} = req.body;
+    const session = await sessionService.joinSession(sessionId, userId, socketId,userName);
     res.status(200).json({ message: "Joined session successfully", session });
 
   } catch (error) {

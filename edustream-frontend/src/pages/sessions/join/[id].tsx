@@ -10,14 +10,15 @@ const SessionPage = () => {
   const { id } = router.query;
 
   const userId = useSelector((state: RootState) => state.auth.userInfo?.id);
+  const userName = useSelector((state: RootState) => state.auth.userInfo?.name);
 
   if (!id) return <p>⚠️ Invalid session.</p>;
   if (!userId) return <p>🔒 Unauthorized. Please login.</p>;
 
   return (
     <BaseLayout>
-      <div className="py-10">
-        <LiveKitRoomComponent userId={userId} sessionId={id as string} />
+      <div className="">
+        <LiveKitRoomComponent userId={userId} userName={userName} sessionId={id as string} />
       </div>
     </BaseLayout>
   );

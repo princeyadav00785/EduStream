@@ -1,62 +1,93 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import usePost from "@/hooks/usePost";
 
-const RecordingControl: React.FC<{ roomName: string ,sessionId:string,sessionName:string}> = ({ roomName,sessionId,sessionName }) => {
+const RecordingControl: React.FC<{ roomName: string; sessionId: string; sessionName: string }> = ({
+  roomName,
+  sessionId,
+  sessionName,
+}) => {
   const [recordingStatus, setRecordingStatus] = useState<string>("");
   const [recordingId, setRecordingId] = useState<string>("");
-  const authToken = localStorage.getItem("authToken");
-  
-  const startRecording = async () => {
-    try {
-      const res = await fetch("http://localhost:5003/api/session/recording/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" , Authorization: authToken ? `Bearer ${authToken}` : "",},
-        body: JSON.stringify({ roomName, outputUrl: "",sessionId,sessionName }), 
-      });
-      if(res.status==200)
-      {const data = await res.json();
-      console.log(data);
-      setRecordingId(data.egressId); 
-      setRecordingStatus("Recording started");}
-      else {
-        setRecordingStatus("Error starting recording");
-      }
-    } catch (error) {
-      console.error(error);
-      setRecordingStatus("Error starting recording");
-    }
+
+  const {
+    data: startData,
+    isLoading: isStarting,
+    isSuccess: startSuccess,
+    error: startError,
+    postData: startRecording,
+  } = usePost<{ egressId: string }>("http://localhost:5003/api/session/recording/start");
+
+  const {
+    isLoading: isStopping,
+    isSuccess: stopSuccess,
+    error: stopError,
+    postData: stopRecording,
+  } = usePost("http://localhost:5003/api/session/recording/stop");
+
+  const handleStartRecording = async () => {
+    await startRecording({ roomName, outputUrl: "", sessionId, sessionName });
   };
 
-  const stopRecording = async () => {
-    try {
-      const res = await fetch("http://localhost:5003/api/session/recording/stop", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: authToken ? `Bearer ${authToken}` : "", },
-        body: JSON.stringify({ egressId :recordingId }),
-      });
-      const data = await res.json();
-      setRecordingStatus("Recording stopped");
-    } catch (error) {
-      console.error(error);
-      setRecordingStatus("Error stopping recording");
+  const handleStopRecording = async () => {
+    if (!recordingId) {
+      setRecordingStatus("No active recording found!");
+      return;
     }
+    await stopRecording({ egressId: recordingId });
   };
+
+
+  useEffect(() => {
+    if (startSuccess && startData) {
+      setRecordingId(startData.egressId);
+      setRecordingStatus("Recording started");
+    }
+    if (startError) setRecordingStatus("Error starting recording");
+
+    const timer = setTimeout(() => setRecordingStatus(""), 5000);
+    return () => clearTimeout(timer);
+  }, [startSuccess, startData, startError]);
+
+
+  useEffect(() => {
+    if (stopSuccess) setRecordingStatus("Recording stopped");
+    if (stopError) setRecordingStatus("Error stopping recording");
+
+
+    const timer = setTimeout(() => setRecordingStatus(""), 5000);
+    return () => clearTimeout(timer);
+  }, [stopSuccess, stopError]);
 
   return (
-    <div className=" flex flex-col items-center space-y-4 p-4">
+    <div className="flex flex-col items-center space-y-3 p-3 w-full max-w-md mx-auto">
       <button
-        onClick={startRecording}
-        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        onClick={handleStartRecording}
+        disabled={isStarting}
+        className={`w-full sm:w-auto px-3 py-1 text-xs sm:text-sm font-medium text-white rounded-full shadow-md transition duration-300 ease-in-out ${
+          isStarting ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+        }`}
+        aria-label="Start Recording"
       >
-        Start Recording
+        {isStarting ? "Starting..." : "Start Recording"}
       </button>
+
       <button
-        onClick={stopRecording}
-        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        onClick={handleStopRecording}
+        disabled={isStopping}
+        className={`w-full sm:w-auto px-3 py-1 text-xs sm:text-sm font-medium text-white rounded-full shadow-md transition duration-300 ease-in-out ${
+          isStopping ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
+        }`}
+        aria-label="Stop Recording"
       >
-        Stop Recording
+        {isStopping ? "Stopping..." : "Stop Recording"}
       </button>
-      <p className="text-white">{recordingStatus}</p>
+
+      {recordingStatus && (
+        <p className="text-white text-center text-xs sm:text-sm font-medium opacity-100 transition-opacity duration-500">
+          {recordingStatus}
+        </p>
+      )}
     </div>
   );
 };
