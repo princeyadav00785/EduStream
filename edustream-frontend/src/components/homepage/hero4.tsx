@@ -20,8 +20,8 @@ import {
 
 export function Hero4() {
   const images = [
-    "/i1.jpg",
-    "/i2.jpg",
+    // "/i1.jpg",
+    // "/i2.jpg",
     "/i3.jpg",
     "/i4.jpg",
     "/i5.jpg",
