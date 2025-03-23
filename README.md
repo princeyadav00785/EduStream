@@ -10,7 +10,7 @@ EduStream is a scalable live-streaming marketplace where educators can host inte
 
 | Home Page                                                                                                                           |
 | ----------------------------------------------------------------------------------------------------------------------------------- |
-| ![Class](<img width="1470" alt="homepage" src="https://github.com/user-attachments/assets/a3c28b62-9d4b-4b27-99e0-c70d129ca8cd" />) |
+| ![Class](./images/homepage.jpeg) |
 
 | All Sessions               | Session Deatils            |
 | -------------------------- | -------------------------- |
