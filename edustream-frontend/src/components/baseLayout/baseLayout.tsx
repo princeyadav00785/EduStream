@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
 import avatar from "../../../public/avatar.png";
+
 import {
   IconArrowLeft,
   IconBook,
@@ -89,7 +90,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
         document.cookie =
           "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         // window.location.reload();
-        router.push("/");
+        router.push("/login");
       },
     },
   ].filter(Boolean) as LinkType[];

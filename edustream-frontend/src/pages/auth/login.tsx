@@ -45,7 +45,7 @@ export default function LoginFormDemo() {
   useEffect(() => {
     if (isSuccess && data?.token) {
       localStorage.setItem("authToken", data.token);
-      document.cookie = `token=${data.token}; path=/`;  // ✅ Correct token assignment
+      document.cookie = `token=${data.token}; path=/`;  
       toast.success("Login successful! Redirecting...");
 
       // Save user data in Redux

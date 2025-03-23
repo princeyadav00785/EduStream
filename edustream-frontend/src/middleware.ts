@@ -13,6 +13,5 @@ export function middleware(req:NextRequest) {
   if (!isAuthenticated && url === "/") {
     return NextResponse.rewrite(new URL("/homepage", req.url)); 
   }
-
   return NextResponse.next();
 }
