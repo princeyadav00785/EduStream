@@ -90,7 +90,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
         document.cookie =
           "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         // window.location.reload();
-        router.push("/login");
+        router.push("/auth/login");
       },
     },
   ].filter(Boolean) as LinkType[];
